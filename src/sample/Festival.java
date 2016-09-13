@@ -5,6 +5,13 @@ package sample;
  */
 public class Festival {
     public void festivalTTS(String word) {
+        try {
+            String command = "echo " + word + " | festival --tts";
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
+            Process p = pb.start();
+            p.waitFor();
+        } catch (Exception e) {
 
+        }
     }
 }
