@@ -4,13 +4,17 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Button;
+
+import java.awt.*;
 
 public class Main extends Application {
     Stage mainWindow;
@@ -39,12 +43,12 @@ public class Main extends Application {
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
         GridPane gameSceneLayout = setGameScene();
 
+
         Button playButton = new Button("PLAY");
+        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
         GridPane.setConstraints(playButton, 0, 3);
         gameSceneLayout.getChildren().add(playButton);
 
-
-        mainWindow.setScene(menuScene);
 
         //set all scenes into the main scene
         BorderPane mainLayout = new BorderPane();
@@ -57,6 +61,7 @@ public class Main extends Application {
         mainLayout.setBackground(new Background(menuBackground));
 
         mainScene = new Scene(mainLayout, 1040, 640);
+        mainScene.getStylesheets().add("MainSource/LayoutStyles");//add the css style-sheet to the main menu scene
         mainWindow.setScene(mainScene);
         mainWindow.show();
 
@@ -72,23 +77,29 @@ public class Main extends Application {
     }
 
     private VBox setMenuScene(){
-        VBox menuSceneLayout = new VBox(20);
-        menuSceneLayout.setPrefWidth(150);//set width of menu buttons
+        VBox menuSceneLayout = new VBox();
+        menuSceneLayout.setPrefWidth(200);//set width of menu buttons
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Image newGameIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
         newGameButton = new Button("New Game", new ImageView(newGameIcon));
         newGameButton.setMinWidth(menuSceneLayout.getPrefWidth());
+        newGameButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        newGameButton.setContentDisplay(ContentDisplay.TOP);//set image to above text
 
         Image reviewGameIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
         reviewGameButton = new Button("Review Game", new ImageView(reviewGameIcon));
         reviewGameButton.setMinWidth(menuSceneLayout.getPrefWidth());
+        reviewGameButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
 
         Image statisticsIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
         statisticsButton = new Button("Statistics", new ImageView(statisticsIcon));
         statisticsButton.setMinWidth(menuSceneLayout.getPrefWidth());
+        statisticsButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
         menuSceneLayout.getChildren().addAll(newGameButton, reviewGameButton, statisticsButton);
+        menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
+
 
         return menuSceneLayout;
     }
@@ -96,7 +107,7 @@ public class Main extends Application {
     //we may want to reuse this for settings page
     private GridPane setGameScene(){
         GridPane gameGrid = new GridPane();
-        gameGrid.setPadding(new Insets(20,20,20,20));
+        gameGrid.setPadding(new Insets(20,20,20,50));
         gameGrid.setVgap(40);
         gameGrid.setHgap(10);
 
