@@ -20,6 +20,7 @@ public class ConfirmQuitBox {
         window.initModality(Modality.APPLICATION_MODAL);//modality for suppressing main window
         window.setTitle(title);
         window.setMinWidth(250);
+
         Label label = new Label();
         label.setText(message);
 
