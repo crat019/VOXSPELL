@@ -1,4 +1,4 @@
-package MainSource;
+package VoxspellApp;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -11,22 +11,29 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.awt.*;
+/**
+ * Main program for the Voxspell Spelling aid game. An instance of the Voxspell
+ * sets up the gui comprising of a menu scene set on the left hand side and the
+ * main scene on the right hand side. This main scene changes depending on the
+ * menu option that they choose.
+ */
 
-public class Main extends Application {
-    private Stage mainWindow;
-    private Scene mainScene;//background scene of primary window
+public class Voxspell extends Application {
+
+
+    //GUI COMPONENTS
+    private Stage _mainWindow;
+    private Scene _mainScene;//background scene of primary window
     private Scene menuScene;//scene containing the menu
     private Scene gameScene;//scene initiating play
     private Scene statsScene;//scene at bottom of window
 
     //Buttons
-    private Button newGameButton;
-    private Button reviewGameButton;
-    private Button statisticsButton;
+    private Button _newGameButton;
+    private Button _reviewGameButton;
+    private Button _statisticsButton;
 
     private int level = 1;//default level 1
 
@@ -34,9 +41,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        mainWindow = primaryStage;
-        mainWindow.setTitle("VOXSPELL");
-        mainWindow.setOnCloseRequest(e -> {
+        _mainWindow = primaryStage;
+        _mainWindow.setTitle("VOXSPELL");
+        _mainWindow.setOnCloseRequest(e -> {
             e.consume();//suppress user request
             closeProgram();//replace with our own close implementation
         });
@@ -54,10 +61,10 @@ public class Main extends Application {
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         mainLayout.setBackground(new Background(menuBackground));
 
-        mainScene = new Scene(mainLayout, 1040, 640);
-        mainScene.getStylesheets().add("MainSource/LayoutStyles");//add the css style-sheet to the main menu scene
-        mainWindow.setScene(mainScene);
-        mainWindow.show();
+        _mainScene = new Scene(mainLayout, 1040, 640);
+        _mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");//add the css style-sheet to the main menu scene
+        _mainWindow.setScene(_mainScene);
+        _mainWindow.show();
 
 
     }
@@ -69,7 +76,7 @@ public class Main extends Application {
         ConfirmQuitBox quitBox = new ConfirmQuitBox();
         Boolean answer = quitBox.display("Quit VOXSPELL", "Are you sure you want to exit?");
         if (answer){
-            mainWindow.close();
+            _mainWindow.close();
         }
     }
 
@@ -81,12 +88,12 @@ public class Main extends Application {
         VBox menuSceneLayout = new VBox();
         menuSceneLayout.setPrefWidth(150);//set width of menu buttons
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
-        newGameButton = createMenuButtons("ImageResources/newGame.png", "New Game");
-        reviewGameButton = createMenuButtons("ImageResources/newGame.png", "Review Game");
-        statisticsButton = createMenuButtons("ImageResources/newGame.png", "Statistics");
+        _newGameButton = createMenuButtons("ImageResources/newGame.png", "New Game");
+        _reviewGameButton = createMenuButtons("ImageResources/newGame.png", "Review Game");
+        _statisticsButton = createMenuButtons("ImageResources/newGame.png", "Statistics");
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
-        menuSceneLayout.getChildren().addAll(newGameButton, reviewGameButton, statisticsButton);
+        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
 
@@ -120,6 +127,7 @@ public class Main extends Application {
         gameGrid.setHgap(10);
 
         Label levelLabel = new Label("Level");
+        levelLabel.setStyle("-fx-font: 22 arial;");
         GridPane.setConstraints(levelLabel, 0, 0);
 
         /*
@@ -135,6 +143,7 @@ public class Main extends Application {
         ToggleGroup levelToggles = setLevelButtons(9, gameGrid);
 
         Label voiceLabel = new Label("Voice");
+        voiceLabel.setStyle("-fx-font: 22 arial;");
         GridPane.setConstraints(voiceLabel, 0, 1);
 
         //set up combo box for choosing levels
@@ -142,6 +151,7 @@ public class Main extends Application {
         voiceOptionCombo.getItems().addAll(
                 "Voice 1", "Voice 2", "Voice 3", "Voice 4"
         );
+        voiceOptionCombo.setStyle("-fx-font: 22 arial;");
         GridPane.setConstraints(voiceOptionCombo, 1, 1);
 
         //gameGrid.getChildren().addAll(levelLabel, levelOptionCombo, voiceLabel, voiceOptionCombo);
@@ -160,6 +170,7 @@ public class Main extends Application {
         for (int i = 1; i <maxLevel+1 ; i++){
             ToggleButton levelButton = new ToggleButton("" + i);
             levelButton.setUserData(i);
+            levelButton.setStyle("-fx-font: 22 arial;");
 
             if (i ==1){
                 levelButton.setSelected(true);
