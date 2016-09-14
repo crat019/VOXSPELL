@@ -1,10 +1,12 @@
 package MainSource;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,21 +14,21 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javafx.scene.control.Button;
-
 import java.awt.*;
 
 public class Main extends Application {
-    Stage mainWindow;
-    Scene mainScene;//background scene of primary window
-    Scene menuScene;//scene containing the menu
-    Scene gameScene;//scene initiating play
-    Scene statsScene;//scene at bottom of window
+    private Stage mainWindow;
+    private Scene mainScene;//background scene of primary window
+    private Scene menuScene;//scene containing the menu
+    private Scene gameScene;//scene initiating play
+    private Scene statsScene;//scene at bottom of window
 
     //Buttons
-    Button newGameButton;
-    Button reviewGameButton;
-    Button statisticsButton;
+    private Button newGameButton;
+    private Button reviewGameButton;
+    private Button statisticsButton;
+
+    private int level = 1;//default level 1
 
     Button playButton;
 
@@ -39,16 +41,8 @@ public class Main extends Application {
             closeProgram();//replace with our own close implementation
         });
 
-
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
-        GridPane gameSceneLayout = setGameScene();
-
-
-        Button playButton = new Button("PLAY");
-        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
-        GridPane.setConstraints(playButton, 0, 3);
-        gameSceneLayout.getChildren().add(playButton);
-
+        GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
 
         //set all scenes into the main scene
         BorderPane mainLayout = new BorderPane();
@@ -68,6 +62,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Logic for closing program. Used to save history before qutting game.
+     */
     private void closeProgram(){
         ConfirmQuitBox quitBox = new ConfirmQuitBox();
         Boolean answer = quitBox.display("Quit VOXSPELL", "Are you sure you want to exit?");
@@ -76,25 +73,17 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Logic for setting up the left-side menu scene (specific for main entry menu only).
+     * @return menu vbox layout
+     */
     private VBox setMenuScene(){
         VBox menuSceneLayout = new VBox();
-        menuSceneLayout.setPrefWidth(200);//set width of menu buttons
+        menuSceneLayout.setPrefWidth(150);//set width of menu buttons
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
-        Image newGameIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
-        newGameButton = new Button("New Game", new ImageView(newGameIcon));
-        newGameButton.setMinWidth(menuSceneLayout.getPrefWidth());
-        newGameButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
-        newGameButton.setContentDisplay(ContentDisplay.TOP);//set image to above text
-
-        Image reviewGameIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
-        reviewGameButton = new Button("Review Game", new ImageView(reviewGameIcon));
-        reviewGameButton.setMinWidth(menuSceneLayout.getPrefWidth());
-        reviewGameButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
-
-        Image statisticsIcon = new Image("ImageResources/newGame.png", 40, 40, false, true);
-        statisticsButton = new Button("Statistics", new ImageView(statisticsIcon));
-        statisticsButton.setMinWidth(menuSceneLayout.getPrefWidth());
-        statisticsButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        newGameButton = createMenuButtons("ImageResources/newGame.png", "New Game");
+        reviewGameButton = createMenuButtons("ImageResources/newGame.png", "Review Game");
+        statisticsButton = createMenuButtons("ImageResources/newGame.png", "Statistics");
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
         menuSceneLayout.getChildren().addAll(newGameButton, reviewGameButton, statisticsButton);
@@ -104,6 +93,25 @@ public class Main extends Application {
         return menuSceneLayout;
     }
 
+    /**
+     * Create menu buttons for the menu scene
+     * @param imageName image filepath
+     * @param caption button caption
+     * @return button node
+     */
+    private Button createMenuButtons(String imageName, String caption){
+        Image newGameIcon = new Image(imageName, 120, 120, false, true);//size of image
+        Button newButton = new Button(caption, new ImageView(newGameIcon));
+        newButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        newButton.setContentDisplay(ContentDisplay.TOP);
+        return newButton;
+    }
+
+    /**
+     * Logic for the main game scene of the main entry window
+     * thinking of reusing for settings popup window
+     * @return main game scene as a gridPane
+     */
     //we may want to reuse this for settings page
     private GridPane setGameScene(){
         GridPane gameGrid = new GridPane();
@@ -134,9 +142,39 @@ public class Main extends Application {
         GridPane.setConstraints(voiceOptionCombo, 1, 1);
 
         gameGrid.getChildren().addAll(levelLabel, levelOptionCombo, voiceLabel, voiceOptionCombo);
+        Button playButton = new Button("PLAY");
+        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+        GridPane.setConstraints(playButton, 0, 3);
+        gameGrid.getChildren().add(playButton);
         return gameGrid;
 
+    }
 
+    private ToggleGroup setLevelButtons(int maxLevel){
+        ToggleGroup levelGroup = new ToggleGroup();
+        for (int i = 1; i <maxLevel+1 ; i++){
+            ToggleButton levelButton = new ToggleButton("" + i);
+            if (i == 1){
+                levelButton.setSelected(true);
+            } else {
+                levelButton.setUserData(i);
+                GridPane.setConstraints(levelButton, i, 0);
+                //disable if user has not achieved desired level#TODO
+            }
+            levelButton.setToggleGroup(levelGroup);
+
+        }
+        levelGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (newValue==null){
+                    level=1;//default level
+                } else {
+                    level = (int) levelGroup.getSelectedToggle().getUserData();//set level via button select
+                }
+            }
+        });
+        return levelGroup;
     }
 
 
