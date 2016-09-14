@@ -10,3 +10,4 @@
     -fx-padding: 20;
     -fx-spacing: 30;/*spacing between buttons */
 }
+

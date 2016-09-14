@@ -122,6 +122,7 @@ public class Main extends Application {
         Label levelLabel = new Label("Level");
         GridPane.setConstraints(levelLabel, 0, 0);
 
+        /*
         //set up combo box for choosing levels
         ComboBox levelOptionCombo = new ComboBox<String>();
         levelOptionCombo.getItems().addAll(
@@ -130,6 +131,8 @@ public class Main extends Application {
                 "Level 9"
         );
         GridPane.setConstraints(levelOptionCombo, 1, 0);
+        */
+        ToggleGroup levelToggles = setLevelButtons(9, gameGrid);
 
         Label voiceLabel = new Label("Voice");
         GridPane.setConstraints(voiceLabel, 0, 1);
@@ -141,7 +144,8 @@ public class Main extends Application {
         );
         GridPane.setConstraints(voiceOptionCombo, 1, 1);
 
-        gameGrid.getChildren().addAll(levelLabel, levelOptionCombo, voiceLabel, voiceOptionCombo);
+        //gameGrid.getChildren().addAll(levelLabel, levelOptionCombo, voiceLabel, voiceOptionCombo);
+        gameGrid.getChildren().addAll(levelLabel, voiceLabel, voiceOptionCombo);
         Button playButton = new Button("PLAY");
         playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
         GridPane.setConstraints(playButton, 0, 3);
@@ -150,18 +154,20 @@ public class Main extends Application {
 
     }
 
-    private ToggleGroup setLevelButtons(int maxLevel){
+    private ToggleGroup setLevelButtons(int maxLevel, GridPane gameGrid){
+        HBox levelHBox = new HBox();
         ToggleGroup levelGroup = new ToggleGroup();
         for (int i = 1; i <maxLevel+1 ; i++){
             ToggleButton levelButton = new ToggleButton("" + i);
-            if (i == 1){
+            levelButton.setUserData(i);
+
+            if (i ==1){
                 levelButton.setSelected(true);
-            } else {
-                levelButton.setUserData(i);
-                GridPane.setConstraints(levelButton, i, 0);
-                //disable if user has not achieved desired level#TODO
             }
+            //disable if user has not achieved desired level#TODO
+
             levelButton.setToggleGroup(levelGroup);
+            levelHBox.getChildren().add(levelButton);
 
         }
         levelGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -174,6 +180,8 @@ public class Main extends Application {
                 }
             }
         });
+        GridPane.setConstraints(levelHBox, 1, 0);
+        gameGrid.getChildren().add(levelHBox);
         return levelGroup;
     }
 
