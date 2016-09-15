@@ -1,11 +1,10 @@
-package MainSource;
+package VoxspellApp;
 
 ;import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -21,6 +20,7 @@ public class ConfirmQuitBox {
         window.initModality(Modality.APPLICATION_MODAL);//modality for suppressing main window
         window.setTitle(title);
         window.setMinWidth(250);
+
         Label label = new Label();
         label.setText(message);
 

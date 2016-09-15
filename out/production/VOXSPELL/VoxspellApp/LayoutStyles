@@ -1,0 +1,13 @@
+/*
+ *layout styles
+ */
+
+.vbox {
+    -fx-background-size: 300, 700;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #caffd0;
+    -fx-border-width: 2px;
+    -fx-padding: 20;
+    -fx-spacing: 30;/*spacing between buttons */
+}
+
