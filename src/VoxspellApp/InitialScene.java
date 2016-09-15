@@ -18,16 +18,20 @@ import javafx.scene.layout.*;
  * responsible for creating and handling interaction with the initial window of the game.
  */
 public class InitialScene {
-    private int _level;
     private Scene _mainScene;//background scene of primary window
     private Scene menuScene;//scene containing the menu
     private Scene gameScene;//scene initiating play
     private Scene statsScene;//scene at bottom of window
+    private BorderPane _mainLayout;
 
     //Buttons
     private Button _newGameButton;
     private Button _reviewGameButton;
     private Button _statisticsButton;
+
+    private int _level;
+    private Mode _mode = Mode.NEW;
+    protected enum Mode{NEW, REVIEW};
 
     public InitialScene(int level){
         _level = level;
@@ -35,17 +39,19 @@ public class InitialScene {
         GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
 
         //set all scenes into the main scene
-        BorderPane mainLayout = new BorderPane();
-        mainLayout.setLeft(menuSceneLayout);
-        mainLayout.setCenter(gameSceneLayout);
+        _mainLayout = new BorderPane();
+        _mainLayout.setLeft(menuSceneLayout);
+        _mainLayout.setCenter(gameSceneLayout);
         //mainLayout.setRight()
 
         BackgroundImage menuBackground = new BackgroundImage(new Image("ImageResources/background.png", 1040, 640, false, true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        mainLayout.setBackground(new Background(menuBackground));
+        _mainLayout.setBackground(new Background(menuBackground));
 
-        _mainScene = new Scene(mainLayout, 1040, 640);
+        _mainScene = new Scene(_mainLayout, 1040, 640);
         _mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");//add the css style-sheet to the main menu scene
+
+        setupEventHandlers();
 
     }
 
@@ -130,10 +136,14 @@ public class InitialScene {
         voiceOptionCombo.setStyle("-fx-font: 22 arial;");
         GridPane.setConstraints(voiceOptionCombo, 1, 1);
 
-        //gameGrid.getChildren().addAll(levelLabel, levelOptionCombo, voiceLabel, voiceOptionCombo);
+
         gameGrid.getChildren().addAll(levelLabel, voiceLabel, voiceOptionCombo);
         Button playButton = new Button("PLAY");
+        playButton.setOnAction(e->{
+            //TODO set to new game
+        });
         playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+
         GridPane.setConstraints(playButton, 0, 3);
         gameGrid.getChildren().add(playButton);
         return gameGrid;
@@ -148,6 +158,9 @@ public class InitialScene {
             ToggleButton levelButton = new ToggleButton("" + i);
             levelButton.setUserData(i);
             levelButton.setStyle("-fx-font: 22 arial;");
+            levelButton.setOnAction(e->{
+                _level = Integer.parseInt(levelButton.getText());
+            });
 
             if (i ==1){
                 levelButton.setSelected(true);
@@ -171,6 +184,20 @@ public class InitialScene {
         GridPane.setConstraints(levelHBox, 1, 0);
         gameGrid.getChildren().add(levelHBox);
         return levelGroup;
+    }
+
+    private void setupEventHandlers(){
+        _newGameButton.setOnAction(event -> {
+            _mainLayout.setCenter(setGameScene());
+            _mode=Mode.NEW;
+        });
+        _reviewGameButton.setOnAction(event -> {
+            _mainLayout.setCenter(setGameScene());
+            _mode=Mode.REVIEW;
+        });
+        _statisticsButton.setOnAction(event -> {
+            _mainLayout.setCenter(setGameScene());//TODO set to statistics scene
+        });
     }
 
 }

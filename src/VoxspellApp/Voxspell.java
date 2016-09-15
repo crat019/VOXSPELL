@@ -49,7 +49,6 @@ public class Voxspell extends Application {
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
 
-
     }
 
     /**
