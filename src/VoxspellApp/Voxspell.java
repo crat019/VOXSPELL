@@ -1,18 +1,11 @@
 package VoxspellApp;
 
-import com.sun.corba.se.impl.presentation.rmi.IDLNameTranslatorImpl;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import models.WordModel;
+
+import java.io.IOException;
 
 /**
  * Main program for the Voxspell Spelling aid game. An instance of the Voxspell
@@ -30,6 +23,7 @@ public class Voxspell extends Application {
 
 
     private int level = 1;//default level 1
+    private WordModel _model;
 
     Button playButton;
 
@@ -38,32 +32,39 @@ public class Voxspell extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+
+
         _mainWindow = primaryStage;
         _mainWindow.setTitle("VOXSPELL");
         _mainWindow.setOnCloseRequest(e -> {
             e.consume();//suppress user request
-            closeProgram();//replace with our own close implementation
+            closeProgram("Are you sure you want to quit Voxspell?");//replace with our own close implementation
         });
 
         _initialScene = new InitialScene(level);
 
-
-
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
+        try{
+            _model = new WordModel("NZCER-spelling-lists.txt");
+        } catch (IOException e){
+            closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
+        }
 
     }
 
     /**
      * Logic for closing program. Used to save history before qutting game.
      */
-    private void closeProgram(){
+    private void closeProgram(String message){
         ConfirmQuitBox quitBox = new ConfirmQuitBox();
-        Boolean answer = quitBox.display("Quit VOXSPELL", "Are you sure you want to exit?");
+        Boolean answer = quitBox.display("Quit VOXSPELL", message);
         if (answer){
             _mainWindow.close();
         }
     }
+
 
 
 
