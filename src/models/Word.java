@@ -30,4 +30,17 @@ public class Word implements Resettable{
         _status = Status.Unseen;
     }
 
+    @Override
+    /**
+     * This method overrides the default equals method so that the words will be
+     * compared to their strings and not their actual objects
+     */
+    public boolean equals(Object object) {
+        if (object instanceof Word) {
+            return ((Word)object)._word.equals(this._word);
+        } else {
+            return false;
+        }
+    }
+
 }
