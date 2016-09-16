@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 import java.io.FileReader;
@@ -11,6 +12,7 @@ import java.io.BufferedReader;
  */
 public class WordModel implements Resettable, Serializable {
     List<Level> _levelList;
+    private  int _currentLevel;
 
     public WordModel(String spellingListPath) throws IOException{
         int currentLevelValue = 1;
@@ -23,6 +25,8 @@ public class WordModel implements Resettable, Serializable {
             throw new IOException();//TODO create exception class for invalid IO of text input
         } else {
             currentLevel = new Level(currentLevelValue);
+            _levelList = new ArrayList<>();
+            _levelList.add(currentLevel);
             currentLevelValue+=1;
         }
         while((currentLine = br.readLine())!=null){
@@ -30,6 +34,7 @@ public class WordModel implements Resettable, Serializable {
                 currentLevel.addWord(currentLine);//add to level object
             } else {
                 currentLevel = new Level(currentLevelValue);
+                _levelList.add(currentLevel);
                 currentLevelValue+=1;
             }
 
@@ -43,5 +48,12 @@ public class WordModel implements Resettable, Serializable {
         }
     }
 
+    public void updateLevel(int level) {
+        this._currentLevel = level;
+    }
 
+    public List<Word> getSpellingList() {
+        Level level = _levelList.get(_currentLevel-1);
+        return level.getWords();
+    }
 }
