@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -47,18 +48,24 @@ public class StatisticsScene {
         optionLayout.setPrefWidth(200);//set menu width
         Hyperlink link = new Hyperlink("Overview");
         link.setOnAction(e->{//set graphScene to the overall statistics setting
-
+            _bgLayout.setCenter(_graphSceneLayout);
         });
         optionLayout.getChildren().add(link);
         for(int i = 0; i<Voxspell.COUNT; i++){
-            _level = i;
+            final int level = i;
             link = new Hyperlink("Level "+(i+1));
             link.setOnAction(e->{//change the graphScene
                 VBox graphLayout = new VBox(80);
-                PieChart levelPie = createPie("Level" + (_level+1) + " Accuracy", _level);
-                BarChart<Number, String> levelBar = createBar("Word Statistics", _level);
-                graphLayout.getChildren().addAll(levelPie, levelBar);
-                _graphSceneLayout = new ScrollPane(graphLayout);//set the scrollpane with a vbox consisting of pie and bar
+                if (_model.getAccessLevel() <= level){
+                    Label accessDeniedLabel = new Label("You have not reached this level yet.");
+                    graphLayout.getChildren().add(accessDeniedLabel);
+                } else {
+                    PieChart levelPie = createPie("Level" + (level + 1) + " Accuracy", level);
+                    BarChart<Number, String> levelBar = createBar("Word Statistics", level);
+                    graphLayout.getChildren().addAll(levelPie, levelBar);
+                }
+                ScrollPane graphSceneLayout = new ScrollPane(graphLayout);//set the scrollpane with a vbox consisting of pie and bar
+                _bgLayout.setCenter(graphSceneLayout);
 
             });
             optionLayout.getChildren().add(link);//add to menu vbox
@@ -69,10 +76,12 @@ public class StatisticsScene {
         //TODO VBox add pie graph of overall statistic
         graphLayout.getChildren().add(createOverallPie());
         _graphSceneLayout = new ScrollPane(graphLayout);
+        _graphSceneLayout.setStyle("-fx-background-color: transparent;");
 
         _bgLayout = new BorderPane();
         _bgLayout.setLeft(optionLayout);
         _bgLayout.setCenter(_graphSceneLayout);
+        _bgLayout.getStylesheets().add("VoxspellApp/LayoutStyles");
 
 
         return _bgLayout;
