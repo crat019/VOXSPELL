@@ -18,7 +18,7 @@ public class Voxspell extends Application {
 
 
     //GUI COMPONENTS
-    private Stage _mainWindow;
+    public Stage _mainWindow;
     private InitialScene _initialScene;
 
 
@@ -46,11 +46,19 @@ public class Voxspell extends Application {
 
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
+
         try{
             _model = new WordModel("NZCER-spelling-lists.txt");
         } catch (IOException e){
             closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
         }
+
+        // REMOVE THIS BEFORE PULL REQUEST JUST FOR TESTING
+        _model.updateLevel(1);
+
+        SpellingQuizScene scene = new SpellingQuizScene(_model);
+        _mainWindow.setScene(scene.createScene());
+        _mainWindow.show();
 
     }
 
@@ -64,9 +72,6 @@ public class Voxspell extends Application {
             _mainWindow.close();
         }
     }
-
-
-
 
     public static void main(String[] args) {
         launch(args);

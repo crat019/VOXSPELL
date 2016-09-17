@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import models.SpellingQuiz;
 
 /**
  * Created by edson on 15/09/16.
@@ -141,7 +142,6 @@ public class InitialScene {
         Button playButton = new Button("PLAY");
         playButton.setOnAction(e->{
             //TODO set to new game
-
 
         });
         playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");

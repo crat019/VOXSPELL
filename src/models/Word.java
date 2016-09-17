@@ -43,4 +43,20 @@ public class Word implements Resettable{
         }
     }
 
+    /**
+     * This method returns a boolean to see if the input string and the word is the same
+     * @return boolean
+     */
+    public boolean compareWords(String inputWord) {
+        return (this._word.trim().toLowerCase().equals(inputWord.trim().toLowerCase()));
+    }
+
+    /**
+     * This method returns the string representation of the word
+     * @return String _word
+     */
+    public String getWord() {
+        return this._word;
+    }
+
 }
