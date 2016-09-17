@@ -6,20 +6,23 @@ import VoxspellApp.Voxspell;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 
 /**
  * Created by edson on 15/09/16.
  */
-public class Level implements Resettable{
+public class Level implements Resettable, Iterable<Word>{
 
     private int _level;
+    private int[] _accuracyStats;
     private List<Word> _wordList;
 
     public Level(int level){
         _wordList = new ArrayList<Word>();
         _level = level;
+        _accuracyStats = new int[3];
     }
 
     protected void addWord(String word){
@@ -50,4 +53,36 @@ public class Level implements Resettable{
            return selectedWords;
        }
    }
+
+    /**
+     * updates the statistics of Mastered, Faulted, Failed
+     */
+   public void countStats(){
+       for (Word word : _wordList){//go through wordlist and sum up statistics
+           if (word._status != Status.Unseen){//check only words that have been tested
+               for (int i = 0; i < 3; i++){//0 failed 1 faulted 2 mastered
+                   _accuracyStats[i] += word.getStat(i);//get the statistic based on int array position
+               }
+           }
+       }
+   }
+
+   public int getMasterFrequency(){
+       return _accuracyStats[2];
+   }
+
+
+    public int getFaultedFrequency(){
+        return _accuracyStats[1];
+    }
+
+
+    public int getFailedFrequency(){
+        return _accuracyStats[0];
+    }
+
+    public Iterator<Word> iterator(){
+        Iterator<Word> wordIterator = _wordList.iterator();
+        return wordIterator;
+    }
 }

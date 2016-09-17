@@ -42,7 +42,7 @@ public class Voxspell extends Application {
             closeProgram("Are you sure you want to quit Voxspell?");//replace with our own close implementation
         });
 
-        _initialScene = new InitialScene(level);
+        _initialScene = new InitialScene(level, _model);
 
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
