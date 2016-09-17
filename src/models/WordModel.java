@@ -21,13 +21,17 @@ public class WordModel implements Resettable, Serializable {
     private int[] _overallStatstic;
 
     public WordModel(String spellingListPath) throws IOException{
+        //initialise fields
+        _accuracyList = new ArrayList<int[]>();
         _overallStatstic = new int[3];
+
         int currentLevelValue = 1;
         Level currentLevel;
         String currentLine;
         FileReader fr = new FileReader(spellingListPath);
         BufferedReader br = new BufferedReader(fr);
         currentLine = br.readLine();
+
         if (!currentLine.substring(0,1).equals("%")){//check if word not level
             throw new IOException();//TODO create exception class for invalid IO of text input
         } else {

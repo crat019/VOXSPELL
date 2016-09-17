@@ -34,6 +34,11 @@ public class Voxspell extends Application {
     public void start(Stage primaryStage) throws Exception{
 
 
+        try{
+            _model = new WordModel("NZCER-spelling-lists.txt");
+        } catch (IOException e){
+            closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
+        }
 
         _mainWindow = primaryStage;
         _mainWindow.setTitle("VOXSPELL");
@@ -46,11 +51,6 @@ public class Voxspell extends Application {
 
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
-        try{
-            _model = new WordModel("NZCER-spelling-lists.txt");
-        } catch (IOException e){
-            closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
-        }
 
     }
 
