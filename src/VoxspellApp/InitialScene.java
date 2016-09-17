@@ -128,7 +128,7 @@ public class InitialScene {
         );
         GridPane.setConstraints(levelOptionCombo, 1, 0);
         */
-        ToggleGroup levelToggles = setLevelButtons(9, gameGrid);
+        ToggleGroup levelToggles = setLevelButtons(Voxspell.COUNT, gameGrid);
 
         Label voiceLabel = new Label("Voice");
         voiceLabel.setStyle("-fx-font: 22 arial;");

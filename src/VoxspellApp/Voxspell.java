@@ -28,7 +28,7 @@ public class Voxspell extends Application {
     Button playButton;
 
     //GLOBAL VARIABLES
-    public static final int COUNT = 10;
+    public static final int COUNT = 11;
 
     @Override
     public void start(Stage primaryStage) throws Exception{

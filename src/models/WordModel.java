@@ -68,7 +68,7 @@ public class WordModel implements Resettable, Serializable {
      */
     public void updateStatistics(){
         for (int i = 0; i < Voxspell.COUNT; i++){
-            Level currentLevel = _levelList.get(i+1);//i+1 because level starts at 1 not 0.
+            Level currentLevel = _levelList.get(i);
             int[] statusFrequency = new int[3];//make new status freq unique to each level and update overall simultaneous
             statusFrequency[0] = currentLevel.getFailedFrequency();
             _overallStatstic[0] += currentLevel.getFailedFrequency();//add to overall accuracy integer array

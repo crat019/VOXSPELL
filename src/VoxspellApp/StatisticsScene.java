@@ -44,7 +44,7 @@ public class StatisticsScene {
 
         _model.updateStatistics();//updates the statistics of the WordModel
 
-        VBox optionLayout = new VBox(30);
+        VBox optionLayout = new VBox(20);
         optionLayout.setPrefWidth(200);//set menu width
         Hyperlink link = new Hyperlink("Overview");
         link.setOnAction(e->{//set graphScene to the overall statistics setting
