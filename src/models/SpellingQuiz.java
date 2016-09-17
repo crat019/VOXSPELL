@@ -37,15 +37,19 @@ public class SpellingQuiz {
                 // Update Mastered on word
                 _position++;
             } else {
+                System.out.println("Incorrect");
+                System.out.println("Please Spell " + _spellingList.get(_position).getWord());
                 // Festival Incorrect Please Try Again
                 _attemptFlag = true;
                 return;
             }
         } else {
             if (_spellingList.get(_position).compareWords(userinput)) {
+                System.out.println("Correct");
                 // Festival Correct
                 // Update Faulted on Word
             } else {
+                System.out.println("Incorrect");
                 // Festival Incorrect
                 // Update Failed on word
             }
