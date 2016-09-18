@@ -18,7 +18,7 @@ public class Voxspell extends Application {
 
 
     //GUI COMPONENTS
-    public Stage _mainWindow;
+    private Stage _mainWindow;
     private InitialScene _initialScene;
 
 
