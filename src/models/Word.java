@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by edson on 15/09/16.
  */
-public class Word implements Resettable{
+public class Word implements Resettable, Serializable{
     private String _word;
     private int _level;
     private Status _status;

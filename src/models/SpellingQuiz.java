@@ -1,6 +1,6 @@
 package models;
 
-import VoxspellApp.SpellingQuizScene;
+import javafx.concurrent.Task;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class SpellingQuiz {
     private boolean _attemptFlag;
     private int _position;
     private List<Word> _spellingList;
-    private Thread _festivalThread;
+    private Task _festivalTask;
     private Status _status;
     private boolean _finished;
     private String _phrase;
@@ -86,14 +86,15 @@ public class SpellingQuiz {
     }
 
     private void startFestivalThread(String phrase) {
-        _festivalThread = new Thread() {
+        _festivalTask = new Task() {
             @Override
-            public void run() {
-                Festival.festivalTTS(phrase);
+            protected Object call() throws Exception {
+                Festival.festivalTTS(_phrase);
+                return null;
             }
         };
 
-        _festivalThread.start();
+        new Thread(_festivalTask).start();
     }
 
     public void repeatWord() {

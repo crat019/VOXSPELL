@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by edson on 15/09/16.
  */
-public class Level implements Resettable{
+public class Level implements Resettable, Serializable{
 
     private int _level;
     private List<Word> _wordList;
