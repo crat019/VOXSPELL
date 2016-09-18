@@ -52,15 +52,6 @@ public class Voxspell extends Application {
         } catch (IOException e){
             closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
         }
-
-        // REMOVE THIS BEFORE PULL REQUEST JUST FOR TESTING
-        _model.updateLevel(5);
-        SpellingQuizScene scene = new SpellingQuizScene(_model);
-        _mainWindow.setScene(scene.createScene());
-        _mainWindow.show();
-
-
-
     }
 
     /**
