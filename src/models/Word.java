@@ -10,7 +10,7 @@ import java.util.Map;
 public class Word implements Resettable{
     private String _word;
     private int _level;
-    private Status _status;
+    protected Status _status;
     int[] _countList;
 
 
@@ -41,6 +41,19 @@ public class Word implements Resettable{
         } else {
             return false;
         }
+    }
+
+    public int getStat(int status){
+        return _countList[status];
+    }
+
+    public Status getStatus(){
+        return _status;
+    }
+
+    @Override
+    public String toString(){
+        return _word;
     }
 
 }
