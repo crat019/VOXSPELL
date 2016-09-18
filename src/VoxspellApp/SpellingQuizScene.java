@@ -333,6 +333,13 @@ public class SpellingQuizScene {
                 _mainLayout.getChildren().addAll(_statusArea,_resultsArea,_buttonArea,_textArea);
             }
         });
+
+        _mainMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //Switch To Main Menu Scene
+            }
+        });
     }
 
     public Scene createScene() {
