@@ -59,7 +59,7 @@ public class Level implements Resettable, Iterable<Word>{
      */
    public void countStats(){
        for (Word word : _wordList){//go through wordlist and sum up statistics
-           if (word._status != Status.Unseen){//check only words that have been tested
+           if (word.getStatus() != Status.Unseen){//check only words that have been tested
                for (int i = 0; i < 3; i++){//0 failed 1 faulted 2 mastered
                    _accuracyStats[i] += word.getStat(i);//get the statistic based on int array position
                }

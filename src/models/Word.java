@@ -30,6 +30,14 @@ public class Word implements Resettable, Serializable{
         _status = Status.Unseen;
     }
 
+    public int getStat(int status) {
+        return _countList[status];
+    }
+
+    public Status getStatus() {
+        return _status;
+    }
+
     @Override
     /**
      * This method overrides the default equals method so that the words will be
