@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import models.Word;
 import models.WordModel;
 
 /**
@@ -50,7 +49,7 @@ public class InitialScene {
         _mainLayout.setCenter(gameSceneLayout);
         //mainLayout.setRight()
 
-        BackgroundImage menuBackground = new BackgroundImage(new Image("ImageResources/background.png", 1040, 640, false, true),
+        BackgroundImage menuBackground = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         _mainLayout.setBackground(new Background(menuBackground));
 
@@ -72,12 +71,17 @@ public class InitialScene {
         VBox menuSceneLayout = new VBox();
         menuSceneLayout.setPrefWidth(150);//set width of menu buttons
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
-        _newGameButton = createMenuButtons("ImageResources/newGame.png", "New Game");
-        _reviewGameButton = createMenuButtons("ImageResources/newGame.png", "Review Game");
-        _statisticsButton = createMenuButtons("ImageResources/newGame.png", "Statistics");
+        _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
+        _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
+        _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
+        Button STUB = createMenuButtons("MediaResources/newGame.png", "STUB");
+        STUB.setOnAction(e->{
+            VideoPlayer vidya = new VideoPlayer("hi");
+            vidya.display();
+        });
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
-        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton);
+        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, STUB);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
 
