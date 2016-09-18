@@ -16,21 +16,25 @@ public class SpellingQuiz {
     private List<Word> _spellingList;
     private Thread _festivalThread;
     private Status _status;
+    private boolean _finished;
+    private String _phrase;
 
     public void setUpSpellingQuiz(WordModel wordModel) {
         this._wordModel = wordModel;
+        _finished = false;
         _setUpFlag = false;
         _attemptFlag = false;
         _position = 0;
         _spellingList = _wordModel.getSpellingList();
+        _phrase = "";
         spellingLogic("");
     }
 
     public void spellingLogic(String userinput) {
         if (!_setUpFlag) {
-            String phrase = "Please Spell " + _spellingList.get(_position).getWord();
-            System.out.println(phrase);
-            startFestivalThread(phrase);
+            _phrase = "Please Spell " + _spellingList.get(_position).getWord();
+            System.out.println(_phrase);
+            startFestivalThread(_phrase);
             _setUpFlag = true;
             _status = Status.Unseen;
             return;
@@ -41,9 +45,9 @@ public class SpellingQuiz {
                 _position++;
                 _status = Status.Mastered;
             } else {
-                String phrase = "Incorrect.. Please Try Again.. " + _spellingList.get(_position).getWord() + "... " +  _spellingList.get(_position).getWord();
-                startFestivalThread(phrase);
-                System.out.println(phrase);
+                _phrase = "Incorrect.. Please Try Again.. " + _spellingList.get(_position).getWord() + "... " +  _spellingList.get(_position).getWord();
+                startFestivalThread(_phrase);
+                System.out.println(_phrase);
                 _attemptFlag = true;
                 _status = Status.Unseen;
                 return;
@@ -63,16 +67,21 @@ public class SpellingQuiz {
         }
 
         if (_position < _spellingList.size()) {
-            String phrase = "Please Spell " + _spellingList.get(_position).getWord();
-            startFestivalThread(phrase);
-            System.out.println(phrase);
+            _phrase = "Please Spell " + _spellingList.get(_position).getWord();
+            startFestivalThread(_phrase);
+            System.out.println(_phrase);
         } else {
+            _finished = true;
             return;
         }
     }
 
     public Status getStatus() {
         return this._status;
+    }
+
+    public boolean getFinishedStatus() {
+        return this._finished;
     }
 
     private void startFestivalThread(String phrase) {
@@ -84,6 +93,10 @@ public class SpellingQuiz {
         };
 
         _festivalThread.start();
+    }
+
+    public void repeatWord() {
+        startFestivalThread(_phrase);
     }
 
 }

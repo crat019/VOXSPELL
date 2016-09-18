@@ -56,4 +56,8 @@ public class WordModel implements Resettable, Serializable {
         Level level = _levelList.get(_currentLevel-1);
         return level.getWords();
     }
+
+    public int getCurrentLevel() {
+        return this._currentLevel;
+    }
 }
