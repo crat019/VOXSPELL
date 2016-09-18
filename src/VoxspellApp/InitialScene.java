@@ -74,14 +74,9 @@ public class InitialScene {
         _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
         _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
         _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
-        Button STUB = createMenuButtons("MediaResources/newGame.png", "STUB");
-        STUB.setOnAction(e->{
-            VideoPlayer vidya = new VideoPlayer("hi");
-            vidya.display();
-        });
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
-        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, STUB);
+        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
 
