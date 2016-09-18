@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import models.SpellingQuiz;
 
 /**
  * Created by edson on 15/09/16.
