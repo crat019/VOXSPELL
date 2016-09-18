@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import models.Word;
+import models.WordModel;
 
 /**
  * Created by edson on 15/09/16.
@@ -33,8 +35,12 @@ public class InitialScene {
     private Mode _mode = Mode.NEW;
     protected enum Mode{NEW, REVIEW};
 
-    public InitialScene(int level){
+    private WordModel _model;
+
+    public InitialScene(int level, WordModel model){
+        _model = model;
         _level = level;
+
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
         GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
 
@@ -122,7 +128,7 @@ public class InitialScene {
         );
         GridPane.setConstraints(levelOptionCombo, 1, 0);
         */
-        ToggleGroup levelToggles = setLevelButtons(9, gameGrid);
+        ToggleGroup levelToggles = setLevelButtons(Voxspell.COUNT, gameGrid);
 
         Label voiceLabel = new Label("Voice");
         voiceLabel.setStyle("-fx-font: 22 arial;");
@@ -197,7 +203,8 @@ public class InitialScene {
             _mode=Mode.REVIEW;
         });
         _statisticsButton.setOnAction(event -> {
-            _mainLayout.setCenter(setGameScene());//TODO set to statistics scene
+            StatisticsScene graphScene = new StatisticsScene(_model);
+            _mainLayout.setCenter(graphScene.createScene());//set center pane to the StatisticsScene's layout node
         });
     }
 
