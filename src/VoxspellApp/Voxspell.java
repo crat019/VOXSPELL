@@ -54,10 +54,12 @@ public class Voxspell extends Application {
         }
 
         // REMOVE THIS BEFORE PULL REQUEST JUST FOR TESTING
-        _model.updateLevel(1);
+        _model.updateLevel(5);
         SpellingQuizScene scene = new SpellingQuizScene(_model);
         _mainWindow.setScene(scene.createScene());
         _mainWindow.show();
+
+
 
     }
 

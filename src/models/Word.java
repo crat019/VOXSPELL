@@ -56,7 +56,7 @@ public class Word implements Resettable{
      * @return String _word
      */
     public String getWord() {
-        return this._word;
+        return this._word.trim();
     }
 
 }
