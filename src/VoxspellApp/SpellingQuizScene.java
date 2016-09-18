@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import models.Festival;
 import models.SpellingQuiz;
 import models.Status;
 import models.WordModel;
@@ -216,6 +217,9 @@ public class SpellingQuizScene {
         _nextLevelButton.setMinWidth(300);
         _nextLevelButton.setMinHeight(25);
         _nextLevelButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        if (_wordModel.getCurrentLevel() >= _wordModel.getNumberOfLevels()) {
+            _nextLevelButton.setDisable(true);
+        }
 
         _stayButton.setMinWidth(300);
         _stayButton.setMinHeight(25);
@@ -281,6 +285,7 @@ public class SpellingQuizScene {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode().toString().equals("ENTER")) {
+                    //Festival.stopFestivalTTS();
                     submitHandler();
                 }
             }
@@ -289,6 +294,7 @@ public class SpellingQuizScene {
         _submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                //Festival.stopFestivalTTS();
                 submitHandler();
             }
         });

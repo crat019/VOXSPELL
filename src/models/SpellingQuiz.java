@@ -40,7 +40,7 @@ public class SpellingQuiz {
             return;
         } else if (!_attemptFlag) {
             if (_spellingList.get(_position).compareWords(userinput)) {
-                startFestivalThread("Correct");
+                _phrase = "Correct..";
                 _spellingList.get(_position).countUp(Status.Mastered);
                 _position++;
                 _status = Status.Mastered;
@@ -54,11 +54,11 @@ public class SpellingQuiz {
             }
         } else {
             if (_spellingList.get(_position).compareWords(userinput)) {
-                startFestivalThread("Correct");
+                _phrase = "Correct..";
                 _spellingList.get(_position).countUp(Status.Faulted);
                 _status = Status.Faulted;
             } else {
-                startFestivalThread("Incorrect");
+                _phrase = "Incorrect..";
                 _spellingList.get(_position).countUp(Status.Failed);
                 _status = Status.Failed;
             }
@@ -67,10 +67,11 @@ public class SpellingQuiz {
         }
 
         if (_position < _spellingList.size()) {
-            _phrase = "Please Spell " + _spellingList.get(_position).getWord();
+            _phrase = _phrase + " Please Spell " + _spellingList.get(_position).getWord();
             startFestivalThread(_phrase);
             System.out.println(_phrase);
         } else {
+            startFestivalThread(_phrase);
             _finished = true;
             return;
         }
@@ -96,7 +97,7 @@ public class SpellingQuiz {
     }
 
     public void repeatWord() {
-        startFestivalThread(_phrase);
+        startFestivalThread(_spellingList.get(_position).getWord());
     }
 
 }
