@@ -61,6 +61,7 @@ public class Voxspell extends Application {
         ConfirmQuitBox quitBox = new ConfirmQuitBox();
         Boolean answer = quitBox.display("Quit VOXSPELL", message);
         if (answer){
+            _model.saveData();
             _mainWindow.close();
         }
     }
