@@ -42,20 +42,15 @@ public class Voxspell extends Application {
             closeProgram("Are you sure you want to quit Voxspell?");//replace with our own close implementation
         });
 
-        _initialScene = new InitialScene(level);
-
-        _mainWindow.setScene(_initialScene.createScene());
-        _mainWindow.show();
-
         try{
             _model = new WordModel("NZCER-spelling-lists.txt");
         } catch (IOException e){
             closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
         }
 
-        _model.updateLevel(1);
-        SpellingQuizScene quiz = new SpellingQuizScene(_model);
-        _mainWindow.setScene(quiz.createScene());
+        _initialScene = new InitialScene(level, _model);
+
+        _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
     }
 
