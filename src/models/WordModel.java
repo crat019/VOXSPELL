@@ -56,7 +56,8 @@ public class WordModel implements Resettable, Serializable {
 
         _accessStats = new boolean[_totalLevels];
         for(int i = 0; i < _accessStats.length; i++){
-            _accessStats[i] = false;
+            _accuracyList.add(new int[3]);//initialise accuracy stats for each level
+            _accessStats[i] = false;//set accessible to all level stats to false
         }
     }
 
@@ -73,17 +74,18 @@ public class WordModel implements Resettable, Serializable {
      * updates model; called whenever user wishes to see the statistics.
      */
     public void updateStatistics(){
+        //reinitialise overall statistics
+        _overallStatstic = new int[3];
         for (int i = 0; i < _totalLevels; i++){
             Level currentLevel = _levelList.get(i);
             currentLevel.countStats();
-            int[] statusFrequency = new int[3];//make new status freq unique to each level and update overall simultaneous
+            int[] statusFrequency = _accuracyList.get(i);//get the stats
             statusFrequency[0] = currentLevel.getFailedFrequency();
             _overallStatstic[0] += currentLevel.getFailedFrequency();//add to overall accuracy integer array
             statusFrequency[1] = currentLevel.getFaultedFrequency();//create int array representing accuracy for each level
             _overallStatstic[1] += currentLevel.getFaultedFrequency();
             statusFrequency[2] = currentLevel.getMasterFrequency();
             _overallStatstic[2] += currentLevel.getMasterFrequency();
-            _accuracyList.add(statusFrequency);
         }
     }
 

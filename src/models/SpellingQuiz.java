@@ -45,7 +45,6 @@ public class SpellingQuiz {
                 _spellingList.get(_position).countUp(Status.Mastered);
                 _position++;
                 _status = Status.Mastered;
-                _spellingList.get(_position-1).countUp(_status);
             } else {
                 _phrase = "Incorrect.. Please Try Again.. " + _spellingList.get(_position).getWord() + "... " +  _spellingList.get(_position).getWord();
                 startFestivalThread(_phrase);
@@ -60,13 +59,11 @@ public class SpellingQuiz {
                 _phrase = "Correct..";
                 _spellingList.get(_position).countUp(Status.Faulted);
                 _status = Status.Faulted;
-                _spellingList.get(_position-1).countUp(_status);
             } else {
                 //incorrect on both tries
                 _phrase = "Incorrect..";
                 _spellingList.get(_position).countUp(Status.Failed);
                 _status = Status.Failed;
-                _spellingList.get(_position-1).countUp(_status);
             }
             _position++;
             _attemptFlag = false;

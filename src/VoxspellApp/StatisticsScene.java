@@ -32,6 +32,7 @@ public class StatisticsScene {
     private ScrollPane _graphSceneLayout;
     private int _bargraphHeight;
 
+
     private int _level;
 
 
