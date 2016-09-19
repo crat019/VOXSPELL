@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import models.WordModel;
 
 /**
@@ -19,16 +20,15 @@ import models.WordModel;
  * responsible for creating and handling interaction with the initial window of the game.
  */
 public class InitialScene {
+    private Stage _window;
     private Scene _mainScene;//background scene of primary window
-    private Scene menuScene;//scene containing the menu
-    private Scene gameScene;//scene initiating play
-    private Scene statsScene;//scene at bottom of window
     private BorderPane _mainLayout;
 
     //Buttons
     private Button _newGameButton;
     private Button _reviewGameButton;
     private Button _statisticsButton;
+    private Button playButton;
 
     private int _level;
     private Mode _mode = Mode.NEW;
@@ -36,9 +36,12 @@ public class InitialScene {
 
     private WordModel _model;
 
-    public InitialScene(int level, WordModel model){
+    public InitialScene(Stage window, WordModel model){
         _model = model;
-        _level = level;
+        _window = window;
+
+        playButton = new Button("PLAY");
+        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
 
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
         GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
@@ -55,6 +58,8 @@ public class InitialScene {
 
         _mainScene = new Scene(_mainLayout, 1040, 640);
         _mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");//add the css style-sheet to the main menu scene
+
+
 
         setupEventHandlers();
 
@@ -127,7 +132,7 @@ public class InitialScene {
         );
         GridPane.setConstraints(levelOptionCombo, 1, 0);
         */
-        ToggleGroup levelToggles = setLevelButtons(Voxspell.COUNT, gameGrid);
+        ToggleGroup levelToggles = setLevelButtons(_model.getTotalLevels(), gameGrid);
 
         Label voiceLabel = new Label("Voice");
         voiceLabel.setStyle("-fx-font: 22 arial;");
@@ -143,17 +148,15 @@ public class InitialScene {
 
 
         gameGrid.getChildren().addAll(levelLabel, voiceLabel, voiceOptionCombo);
-        Button playButton = new Button("PLAY");
-        playButton.setOnAction(e->{
-            //TODO set to new game
-
-        });
-        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
 
         GridPane.setConstraints(playButton, 0, 3);
         gameGrid.getChildren().add(playButton);
         return gameGrid;
 
+    }
+
+    public Button getPlayButton(){
+        return playButton;
     }
 
     private ToggleGroup setLevelButtons(int maxLevel, GridPane gameGrid){
@@ -164,14 +167,19 @@ public class InitialScene {
             ToggleButton levelButton = new ToggleButton("" + i);
             levelButton.setUserData(i);
             levelButton.setStyle("-fx-font: 22 arial;");
+            //upon button click, update model's level
             levelButton.setOnAction(e->{
-                _level = Integer.parseInt(levelButton.getText());
+                _model.updateLevel(Integer.parseInt(levelButton.getText()));
             });
 
             if (i ==1){
                 levelButton.setSelected(true);
+                _model.updateLevel(1);
             }
-            //disable if user has not achieved desired level#TODO
+            //disable if user has no access to level
+            if (i > _model.getAccessLevel()){
+                levelButton.setDisable(true);
+            }
 
             levelButton.setToggleGroup(levelGroup);
             levelHBox.getChildren().add(levelButton);
@@ -204,6 +212,11 @@ public class InitialScene {
         _statisticsButton.setOnAction(event -> {
             StatisticsScene graphScene = new StatisticsScene(_model);
             _mainLayout.setCenter(graphScene.createScene());//set center pane to the StatisticsScene's layout node
+        });
+        playButton.setOnAction(event ->{
+            SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);
+            Scene newGameScene = newGameSceneCreator.createScene();
+            _window.setScene(newGameScene);
         });
     }
 

@@ -8,11 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import models.Festival;
 import models.SpellingQuiz;
 import models.Status;
@@ -29,6 +31,7 @@ public class SpellingQuizScene {
     private WordModel _wordModel;
 
     //SCENE
+    private Stage _window;
     private Scene _mainScene;
 
     //PANES
@@ -69,8 +72,10 @@ public class SpellingQuizScene {
      * will be passed onto the new spelling quiz.
      * @param wordModel
      */
-    public SpellingQuizScene(WordModel wordModel) {
+    public SpellingQuizScene(WordModel wordModel, Stage window) {
+
         this._wordModel = wordModel;
+        this._window = window;
         setUpGui();
         setUpEventHandelers();
     }
@@ -82,6 +87,9 @@ public class SpellingQuizScene {
         setUpResultsArea();
         _mainLayout.setPadding(new Insets(20));
         _mainLayout.getChildren().addAll(_statusArea,_resultsArea,_buttonArea,_textArea);
+        BackgroundImage menuBackground = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        _mainLayout.setBackground(new Background(menuBackground));
 
         _mainScene = new Scene(_mainLayout, 1040, 640);
         _mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");
@@ -196,6 +204,8 @@ public class SpellingQuizScene {
     }
 
     private void setUpRewardGui() {
+        _wordModel.levelUp();
+
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
         _mainLayout.setSpacing(20);
@@ -344,6 +354,17 @@ public class SpellingQuizScene {
             @Override
             public void handle(ActionEvent event) {
                 //Switch To Main Menu Scene
+                InitialScene mainMenu = new InitialScene(_window, _wordModel);
+                _window.setScene(mainMenu.createScene());
+            }
+        });
+
+        //TODO worker thread here
+        _videoButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                VideoPlayer video = new VideoPlayer();
+                video.display();
             }
         });
     }

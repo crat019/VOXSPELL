@@ -15,8 +15,9 @@ import java.io.BufferedReader;
  */
 public class WordModel implements Resettable, Serializable {
     List<Level> _levelList;//arraylist of Level objects
+    private int _totalLevels;
     private  int _currentLevel;
-    private int _accessLevel = 0;//int of user's highest accessible level
+    private int _accessLevel = 1;//int of user's highest accessible level
     private List<int[]> _accuracyList;//list of int arrays showing statistic for each level
     private int[] _overallStatstic;//int array of overall frequency of each mastered(2),faulted(1),failed(0)
 
@@ -24,8 +25,6 @@ public class WordModel implements Resettable, Serializable {
         //initialise fields
         _accuracyList = new ArrayList<int[]>();
         _overallStatstic = new int[3];
-
-
 
         int currentLevelValue = 1;
         Level currentLevel;
@@ -52,6 +51,7 @@ public class WordModel implements Resettable, Serializable {
             }
 
         }
+        _totalLevels = _levelList.size();
     }
 
     //reset signal propagate to contained object
@@ -67,8 +67,9 @@ public class WordModel implements Resettable, Serializable {
      * updates model; called whenever user wishes to see the statistics.
      */
     public void updateStatistics(){
-        for (int i = 0; i < Voxspell.COUNT; i++){
+        for (int i = 0; i < _totalLevels; i++){
             Level currentLevel = _levelList.get(i);
+            currentLevel.countStats();
             int[] statusFrequency = new int[3];//make new status freq unique to each level and update overall simultaneous
             statusFrequency[0] = currentLevel.getFailedFrequency();
             _overallStatstic[0] += currentLevel.getFailedFrequency();//add to overall accuracy integer array
@@ -86,6 +87,12 @@ public class WordModel implements Resettable, Serializable {
 
     public void updateLevel(int level) {
         this._currentLevel = level;
+    }
+
+    public void levelUp(){
+        if (_accessLevel != Voxspell.COUNT){
+            _accessLevel++;
+        }
     }
 
     public int[] getOverall(){
@@ -108,6 +115,8 @@ public class WordModel implements Resettable, Serializable {
     public int getCurrentLevel() {
         return this._currentLevel;
     }
+
+    public int getTotalLevels(){ return this._totalLevels; }
 
     public int getNumberOfLevels() {
         return this._levelList.size();

@@ -30,6 +30,7 @@ public class StatisticsScene {
     private BorderPane _bgLayout;
     private WordModel _model;
     private ScrollPane _graphSceneLayout;
+    private int _bargraphHeight;
 
     private int _level;
 
@@ -51,17 +52,18 @@ public class StatisticsScene {
             _bgLayout.setCenter(_graphSceneLayout);
         });
         optionLayout.getChildren().add(link);
-        for(int i = 0; i<Voxspell.COUNT; i++){
+        //iterate through levels
+        for(int i = 1; i<_model.getTotalLevels()+1; i++){
             final int level = i;
-            link = new Hyperlink("Level "+(i+1));
-            link.setOnAction(e->{//change the graphScene
+            link = new Hyperlink("Level "+(i));
+            link.setOnAction(e-> {//change the graphScene
                 VBox graphLayout = new VBox(80);
-                if (_model.getAccessLevel() <= level){
+                if (_model.getAccessLevel() <= level - 1 || _model.getAccessLevel() == 1) {
                     Label accessDeniedLabel = new Label("You have not reached this level yet.");
                     graphLayout.getChildren().add(accessDeniedLabel);
                 } else {
-                    PieChart levelPie = createPie("Level" + (level + 1) + " Accuracy", level);
-                    BarChart<Number, String> levelBar = createBar("Word Statistics", level);
+                    PieChart levelPie = createPie("Level" + (level) + " Accuracy", level-1);
+                    BarChart<Number, String> levelBar = createBar("Word Statistics", level-1);
                     graphLayout.getChildren().addAll(levelPie, levelBar);
                 }
                 ScrollPane graphSceneLayout = new ScrollPane(graphLayout);//set the scrollpane with a vbox consisting of pie and bar
@@ -113,6 +115,7 @@ public class StatisticsScene {
 
     private BarChart<Number, String> createBar(String title, int level){
         Level currentLevel = _model.getLevel(level);
+        int bargraphHeight=150;
 
         final NumberAxis xAxis = new NumberAxis();
         final CategoryAxis yAxis = new CategoryAxis();
@@ -132,12 +135,16 @@ public class StatisticsScene {
 
         for (Word word: currentLevel){
             if (word.getStatus() != Status.Unseen){
+                bargraphHeight+=75;
                 //add data poitns with first param being word count and second being word string form
-                failSeries.getData().add(new XYChart.Data(word.getStat(0), word.toString()));
-                faultSeries.getData().add(new XYChart.Data(word.getStat(1), word.toString()));
-                masterSeries.getData().add(new XYChart.Data(word.getStat(2), word.toString()));
+                failSeries.getData().add(new XYChart.Data(word.getStat(0), word.getWord()));
+                faultSeries.getData().add(new XYChart.Data(word.getStat(1), word.getWord()));
+                masterSeries.getData().add(new XYChart.Data(word.getStat(2), word.getWord()));
             }
         }
+        barGraph.getData().addAll(failSeries, faultSeries, masterSeries);
+        barGraph.setMinHeight(bargraphHeight);
+        System.out.println(bargraphHeight);
         return barGraph;//TODO sort word by alphabetical?
     }
 }

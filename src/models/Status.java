@@ -16,7 +16,7 @@ public enum Status {
     }
 
     public int getStatus(){
-        return _statusNumber-1;
+        return _statusNumber;
     }//-1 to account for failed starting at 1
 
 
