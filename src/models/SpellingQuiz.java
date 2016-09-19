@@ -97,7 +97,7 @@ public class SpellingQuiz {
         _festivalTask = new Task() {
             @Override
             protected Object call() throws Exception {
-                Festival.festivalTTS(_phrase);
+                Festival.festivalTTS(phrase);
                 return null;
             }
         };

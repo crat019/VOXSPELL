@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * Created by edson on 15/09/16.
  */
-public class Level implements Resettable, Iterable<Word>{
+public class Level implements Resettable, Iterable<Word>, Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int _level;
     private int[] _accuracyStats;
