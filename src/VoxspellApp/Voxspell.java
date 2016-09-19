@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Main program for the Voxspell Spelling aid game. An instance of the Voxspell
  * sets up the gui comprising of a menu scene set on the left hand side and the
- * main scene on the right hand side. This main scene changes depending on the
+ * main scene on the right hand side. This main scene changes depending on thee
  * menu option that they choose.
  */
 
