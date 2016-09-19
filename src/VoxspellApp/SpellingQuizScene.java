@@ -282,6 +282,7 @@ public class SpellingQuizScene {
             _definitionButton.setDisable(true);
             _submitButton.setDisable(true);
             _inputText.setDisable(true);
+            _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
             if ((double)_numberMastered/Voxspell.COUNT >= 0.9) {
                 setUpRewardGui();
             } else {

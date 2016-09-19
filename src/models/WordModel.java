@@ -18,6 +18,7 @@ public class WordModel implements Resettable, Serializable {
     private int _totalLevels;
     private  int _currentLevel;
     private int _accessLevel = 1;//int of user's highest accessible level
+    private boolean[] _accessStats;
     private List<int[]> _accuracyList;//list of int arrays showing statistic for each level
     private int[] _overallStatstic;//int array of overall frequency of each mastered(2),faulted(1),failed(0)
 
@@ -52,6 +53,11 @@ public class WordModel implements Resettable, Serializable {
 
         }
         _totalLevels = _levelList.size();
+
+        _accessStats = new boolean[_totalLevels];
+        for(int i = 0; i < _accessStats.length; i++){
+            _accessStats[i] = false;
+        }
     }
 
     //reset signal propagate to contained object
@@ -120,5 +126,13 @@ public class WordModel implements Resettable, Serializable {
 
     public int getNumberOfLevels() {
         return this._levelList.size();
+    }
+
+    public void StatsAccessibleOn(){
+        this._accessStats[_currentLevel-1] = true;//toggle on; -1 because currentlevel starts at 1
+    }
+
+    public boolean isStatsAccessible(int position){
+        return this._accessStats[position];
     }
 }

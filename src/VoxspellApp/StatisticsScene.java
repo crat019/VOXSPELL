@@ -58,11 +58,11 @@ public class StatisticsScene {
             link = new Hyperlink("Level "+(i));
             link.setOnAction(e-> {//change the graphScene
                 VBox graphLayout = new VBox(80);
-                if (_model.getAccessLevel() <= level - 1 || _model.getAccessLevel() == 1) {
+                if (!_model.isStatsAccessible(level-1)) {
                     Label accessDeniedLabel = new Label("You have not reached this level yet.");
                     graphLayout.getChildren().add(accessDeniedLabel);
                 } else {
-                    PieChart levelPie = createPie("Level" + (level) + " Accuracy", level-1);
+                    PieChart levelPie = createPie("Level " + (level) + " Accuracy", level-1);
                     BarChart<Number, String> levelBar = createBar("Word Statistics", level-1);
                     graphLayout.getChildren().addAll(levelPie, levelBar);
                 }
@@ -90,7 +90,7 @@ public class StatisticsScene {
     }
 
     private PieChart createPie(String title, int level){
-        int[] levelData = _model.findAccuracy(level);//int array size 3
+        int[] levelData = _model.findAccuracy(level);//int array size 3 level -1 b/c model accuracy starts at 0
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
                 new PieChart.Data("Failed", levelData[0]),
                 new PieChart.Data("Faulted", levelData[1]),
@@ -144,7 +144,6 @@ public class StatisticsScene {
         }
         barGraph.getData().addAll(failSeries, faultSeries, masterSeries);
         barGraph.setMinHeight(bargraphHeight);
-        System.out.println(bargraphHeight);
         return barGraph;//TODO sort word by alphabetical?
     }
 }
