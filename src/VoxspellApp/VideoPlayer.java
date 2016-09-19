@@ -37,12 +37,12 @@ import java.nio.file.Paths;
  * Creates a media player popup window.
  */
 public class VideoPlayer {
-    MediaPlayer _player;
-    Boolean _isPlaying;
-    Boolean _isEnded;
-    Label _timer;
+    private MediaPlayer _player;
+    private Boolean _isPlaying;
+    private Boolean _isEnded;
+    private Label _timer;
 
-    public VideoPlayer(String mediaFilePath){
+    public VideoPlayer(){
 
         Media video = new Media(Paths.get("big_buck_bunny_1_minute.mp4").toUri().toString());//TODO use mediaFilePath
         _player = new MediaPlayer(video);

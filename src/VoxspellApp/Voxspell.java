@@ -1,6 +1,7 @@
 package VoxspellApp;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import models.WordModel;
@@ -32,9 +33,7 @@ public class Voxspell extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-
-
+        //main window of program
         _mainWindow = primaryStage;
         _mainWindow.setTitle("VOXSPELL");
         _mainWindow.setOnCloseRequest(e -> {
@@ -48,7 +47,8 @@ public class Voxspell extends Application {
             closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
         }
 
-        _initialScene = new InitialScene(level, _model);
+        _initialScene = new InitialScene(_mainWindow, _model);
+
 
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
@@ -64,6 +64,7 @@ public class Voxspell extends Application {
             _mainWindow.close();
         }
     }
+
 
     public static void main(String[] args) {
         launch(args);

@@ -39,11 +39,13 @@ public class SpellingQuiz {
             _status = Status.Unseen;
             return;
         } else if (!_attemptFlag) {
+            //correct on first try
             if (_spellingList.get(_position).compareWords(userinput)) {
                 _phrase = "Correct..";
                 _spellingList.get(_position).countUp(Status.Mastered);
                 _position++;
                 _status = Status.Mastered;
+                _spellingList.get(_position-1).countUp(_status);
             } else {
                 _phrase = "Incorrect.. Please Try Again.. " + _spellingList.get(_position).getWord() + "... " +  _spellingList.get(_position).getWord();
                 startFestivalThread(_phrase);
@@ -53,18 +55,24 @@ public class SpellingQuiz {
                 return;
             }
         } else {
+            //correct on second try
             if (_spellingList.get(_position).compareWords(userinput)) {
                 _phrase = "Correct..";
                 _spellingList.get(_position).countUp(Status.Faulted);
                 _status = Status.Faulted;
+                _spellingList.get(_position-1).countUp(_status);
             } else {
+                //incorrect on both tries
                 _phrase = "Incorrect..";
                 _spellingList.get(_position).countUp(Status.Failed);
                 _status = Status.Failed;
+                _spellingList.get(_position-1).countUp(_status);
             }
             _position++;
             _attemptFlag = false;
         }
+
+
 
         if (_position < _spellingList.size()) {
             _phrase = _phrase + " Please Spell " + _spellingList.get(_position).getWord();
@@ -75,7 +83,10 @@ public class SpellingQuiz {
             _finished = true;
             return;
         }
+
+
     }
+
 
     public Status getStatus() {
         return this._status;

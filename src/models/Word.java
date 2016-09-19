@@ -23,6 +23,7 @@ public class Word implements Resettable, Serializable{
 
     public void countUp(Status status){
         _countList[status.getStatus()] += 1;
+        _status = status;
     }
 
     public void reset(){
