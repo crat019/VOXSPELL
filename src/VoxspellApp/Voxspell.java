@@ -28,17 +28,12 @@ public class Voxspell extends Application {
     Button playButton;
 
     //GLOBAL VARIABLES
-    public static final int COUNT = 11;
+    public static final int COUNT = 10;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
 
-        try{
-            _model = new WordModel("NZCER-spelling-lists.txt");
-        } catch (IOException e){
-            closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
-        }
 
         _mainWindow = primaryStage;
         _mainWindow.setTitle("VOXSPELL");
@@ -47,11 +42,21 @@ public class Voxspell extends Application {
             closeProgram("Are you sure you want to quit Voxspell?");//replace with our own close implementation
         });
 
-        _initialScene = new InitialScene(level, _model);
+        _initialScene = new InitialScene(level);
 
         _mainWindow.setScene(_initialScene.createScene());
         _mainWindow.show();
 
+        try{
+            _model = new WordModel("NZCER-spelling-lists.txt");
+        } catch (IOException e){
+            closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
+        }
+
+        _model.updateLevel(1);
+        SpellingQuizScene quiz = new SpellingQuizScene(_model);
+        _mainWindow.setScene(quiz.createScene());
+        _mainWindow.show();
     }
 
     /**
@@ -64,9 +69,6 @@ public class Voxspell extends Application {
             _mainWindow.close();
         }
     }
-
-
-
 
     public static void main(String[] args) {
         launch(args);

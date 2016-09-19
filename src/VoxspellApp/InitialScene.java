@@ -148,7 +148,6 @@ public class InitialScene {
         playButton.setOnAction(e->{
             //TODO set to new game
 
-
         });
         playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
 

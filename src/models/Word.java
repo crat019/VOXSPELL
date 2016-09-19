@@ -7,10 +7,10 @@ import java.util.Map;
 /**
  * Created by edson on 15/09/16.
  */
-public class Word implements Resettable{
+public class Word implements Resettable, Serializable{
     private String _word;
     private int _level;
-    protected Status _status;
+    private Status _status;
     int[] _countList;
 
 
@@ -30,6 +30,14 @@ public class Word implements Resettable{
         _status = Status.Unseen;
     }
 
+    public int getStat(int status) {
+        return _countList[status];
+    }
+
+    public Status getStatus() {
+        return _status;
+    }
+
     @Override
     /**
      * This method overrides the default equals method so that the words will be
@@ -43,17 +51,20 @@ public class Word implements Resettable{
         }
     }
 
-    public int getStat(int status){
-        return _countList[status];
+    /**
+     * This method returns a boolean to see if the input string and the word is the same
+     * @return boolean
+     */
+    public boolean compareWords(String inputWord) {
+        return (this._word.trim().toLowerCase().equals(inputWord.trim().toLowerCase()));
     }
 
-    public Status getStatus(){
-        return _status;
-    }
-
-    @Override
-    public String toString(){
-        return _word;
+    /**
+     * This method returns the string representation of the word
+     * @return String _word
+     */
+    public String getWord() {
+        return this._word.trim();
     }
 
 }

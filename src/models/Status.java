@@ -4,10 +4,10 @@ package models;
  * Created by edson on 15/09/16.
  */
 public enum Status {
-    Mastered(3),
-    Faulted(2),
-    Failed(1),
-    Unseen(0);
+    Mastered(2),
+    Faulted(1),
+    Failed(0),
+    Unseen(3);
 
     private int _statusNumber;
 
