@@ -119,7 +119,7 @@ public class WordModel implements Resettable, Serializable {
     }
 
     public void levelUp(){
-        if (_accessLevel != Voxspell.COUNT){
+        if (_accessLevel != Voxspell.COUNT && _currentLevel == _accessLevel){
             _accessLevel++;
         }
     }
