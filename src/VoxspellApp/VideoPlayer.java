@@ -33,6 +33,8 @@ import java.nio.file.Paths;
 /**
  * Created by edson on 18/09/16.
  * TODO set the setup to worker thread
+ * TODO use mediaFilePath for Paths.get()
+ * Creates a media player popup window.
  */
 public class VideoPlayer {
     MediaPlayer _player;
