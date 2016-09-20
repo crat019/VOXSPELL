@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import models.Festival;
 import models.WordModel;
 
 import java.io.IOException;
@@ -46,6 +47,8 @@ public class Voxspell extends Application {
         } catch (IOException e){
             closeProgram("Spelling list was not found. Continuing may corrupt the program. Quit?");
         }
+
+        Festival.findVoiceList(); // This finds the voice list in the directory and then saves it
 
         _initialScene = new InitialScene(_mainWindow, _model);
 

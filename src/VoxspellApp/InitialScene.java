@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import models.Festival;
 import models.WordModel;
 
 /**
@@ -35,6 +36,8 @@ public class InitialScene {
     protected enum Mode{NEW, REVIEW};
 
     private WordModel _model;
+
+    private ComboBox _voiceOptionCombo;
 
     public InitialScene(Stage window, WordModel model){
         _model = model;
@@ -139,15 +142,14 @@ public class InitialScene {
         GridPane.setConstraints(voiceLabel, 0, 1);
 
         //set up combo box for choosing levels
-        ComboBox voiceOptionCombo = new ComboBox<String>();
-        voiceOptionCombo.getItems().addAll(
-                "Voice 1", "Voice 2", "Voice 3", "Voice 4"
+        _voiceOptionCombo = new ComboBox<String>();
+        _voiceOptionCombo.getItems().addAll(
+                Festival.getVoiceList()
         );
-        voiceOptionCombo.setStyle("-fx-font: 22 arial;");
-        GridPane.setConstraints(voiceOptionCombo, 1, 1);
+        _voiceOptionCombo.setStyle("-fx-font: 22 arial;");
+        GridPane.setConstraints(_voiceOptionCombo, 1, 1);
 
-
-        gameGrid.getChildren().addAll(levelLabel, voiceLabel, voiceOptionCombo);
+        gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo);
 
         GridPane.setConstraints(playButton, 0, 3);
         gameGrid.getChildren().add(playButton);
@@ -217,6 +219,10 @@ public class InitialScene {
             SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);
             Scene newGameScene = newGameSceneCreator.createScene();
             _window.setScene(newGameScene);
+        });
+        _voiceOptionCombo.setOnAction(event -> {
+            String option = (String)_voiceOptionCombo.getValue();
+            Festival.changeVoice(option);
         });
     }
 
