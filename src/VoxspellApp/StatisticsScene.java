@@ -148,39 +148,17 @@ public class StatisticsScene {
         XYChart.Series masterSeries = new XYChart.Series();
         masterSeries.setName("Mastered");
 
-
-
+        //loop through each word in the current level
         for (Word word: currentLevel){
             if (word.getStatus() != Status.Unseen){
-                bargraphHeight+=80;
+                bargraphHeight+=80;//incremement height for each word addition
                 //add data poitns with first param being word count and second being word string form
                 final XYChart.Data<Number, String> failData = new XYChart.Data(word.getStat(0), word.getWord());
-                failData.nodeProperty().addListener(new ChangeListener<Node>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Node> observable, Node oldValue, final Node newValue) {
-                        if (newValue != null) {
-                            setHover(failData);
-                        }
-                    }
-                });
+                drawBarLabels(failData);
                 final XYChart.Data<Number, String> faultData = new XYChart.Data(word.getStat(1), word.getWord());
-                faultData.nodeProperty().addListener(new ChangeListener<Node>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Node> observable, Node oldValue, final Node newValue) {
-                        if (newValue != null) {
-                            setHover(faultData);
-                        }
-                    }
-                });
+                drawBarLabels(faultData);
                 final XYChart.Data<Number, String> masterData = new XYChart.Data(word.getStat(2), word.getWord());
-                masterData.nodeProperty().addListener(new ChangeListener<Node>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Node> observable, Node oldValue, final Node newValue) {
-                        if (newValue != null) {
-                            setHover(masterData);
-                        }
-                    }
-                });
+                drawBarLabels(masterData);
                 failSeries.getData().add(failData);
                 faultSeries.getData().add(faultData);
                 masterSeries.getData().add(masterData);
@@ -196,25 +174,35 @@ public class StatisticsScene {
         return barGraph;//TODO sort word by alphabetical?
     }
 
-    private void setHover(XYChart.Data<Number, String> data) {
-        final Node dataNode = data.getNode();
-        final Text text = new Text(data.getXValue()+"");
-        dataNode.parentProperty().addListener(new ChangeListener<Parent>() {
+    private void drawBarLabels(XYChart.Data<Number, String> data) {
+        data.nodeProperty().addListener(new ChangeListener<Node>() {
             @Override
-            public void changed(ObservableValue<? extends Parent> observable, Parent oldValue, Parent newValue) {
-                Group parentGroup = (Group) newValue;
-                parentGroup.getChildren().add(text);
+            public void changed(ObservableValue<? extends Node> observable, Node oldValue, final Node newValue) {
+                if (newValue != null) {
+                    final Node dataNode = data.getNode();
+                    final Text text = new Text(data.getXValue()+"");
 
+                    dataNode.parentProperty().addListener(new ChangeListener<Parent>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Parent> observable, Parent oldValue, Parent newValue) {
+                            Group parentGroup = (Group) newValue;
+                            parentGroup.getChildren().add(text);
+
+                        }
+                    });
+                    dataNode.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
+                            //set position of count label on bar graph
+                            text.setLayoutX(Math.round(newValue.getMinX()+newValue.getWidth()/2-text.prefWidth(-1)/2)*2+15);//set x position
+                            text.setLayoutY(Math.round(newValue.getMinY()-text.prefHeight(-1)*0.5)+20);//set y position
+                        }
+                    });
+                }
             }
         });
-        dataNode.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-                //set position of count label on bar graph
-                text.setLayoutX(Math.round(newValue.getMinX()+newValue.getWidth()/2-text.prefWidth(-1)/2)*2+15);//set x position
-                text.setLayoutY(Math.round(newValue.getMinY()-text.prefHeight(-1)*0.5)+20);//set y position
-            }
-        });
+
+
 
             /*
             dataNode.setEffect(null);
