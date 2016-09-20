@@ -23,6 +23,7 @@ public class WordModel implements Resettable, Serializable {
     private File _file = new File(".voxspellData.ser");
 
     public WordModel(String spellingListPath) throws IOException{
+        //serializble already exists; not new game
         if (_file.exists()) {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(_file));
@@ -42,7 +43,7 @@ public class WordModel implements Resettable, Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else {//new game
             //initialise fields
             _accuracyList = new ArrayList<int[]>();
             _overallStatstic = new int[3];
@@ -72,6 +73,8 @@ public class WordModel implements Resettable, Serializable {
                 }
 
             }
+
+
             _totalLevels = _levelList.size();
 
             _accessStats = new boolean[_totalLevels];
@@ -89,6 +92,14 @@ public class WordModel implements Resettable, Serializable {
             level.reset();
         }
         _overallStatstic=new int[3];
+    }
+
+    //sort the words in each level for the bar graph
+    public void sort(){
+        //sort the words in the level lists alphabetically
+        for (Level level : _levelList){
+            level.sort();
+        }
     }
 
     /**

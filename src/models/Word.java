@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by edson on 15/09/16.
  */
-public class Word implements Resettable, Serializable{
+public class Word implements Resettable, Serializable, Comparable<Word>{
     private static final long serialVersionUID = 1L;
     private String _word;
     private int _level;
@@ -69,4 +69,9 @@ public class Word implements Resettable, Serializable{
         return this._word.trim();
     }
 
+    //compare alphabetically
+    @Override
+    public int compareTo(Word o) {
+        return o.getWord().toLowerCase().compareTo(_word.toLowerCase());
+    }
 }

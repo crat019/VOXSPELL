@@ -129,6 +129,7 @@ public class StatisticsScene {
 
     private BarChart<Number, String> createBar(String title, int level){
         Level currentLevel = _model.getLevel(level);
+        currentLevel.sort();//sort words alphabetically
         int bargraphHeight=150;
 
         final NumberAxis xAxis = new NumberAxis();
