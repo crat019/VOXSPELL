@@ -4,6 +4,7 @@ package VoxspellApp;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -84,7 +85,7 @@ public class InitialScene {
         _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
         _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
         _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
-        _resetButton = new Button("Reset");
+        _resetButton = createMenuButtons("MediaResources/newGame.png", "Reset");
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
         menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, _resetButton);
@@ -219,7 +220,22 @@ public class InitialScene {
             _mainLayout.setCenter(graphScene.createScene());//set center pane to the StatisticsScene's layout node
         });
         _resetButton.setOnAction(event -> {
-            _model.recreate();
+            VBox resetVbox = new VBox(20);
+            resetVbox.setPadding(new Insets(40,50,40,40));
+            resetVbox.setAlignment(Pos.TOP_CENTER);
+            Label title = new Label("Clear History");
+            Image resetImage = new Image("MediaResources/newGame.png", 150, 150, false, true);
+            ImageView rsImageContainer = new ImageView(resetImage);
+            Label caption1 = new Label("Clearing the history will remove all history statistics.");
+            Label caption2 = new Label("Your highest level will be reset to level 1.");
+            Label caption3 = new Label("Are you sure you want to clear the history?");
+            Button confirmButton = new Button("Clear History");
+
+            confirmButton.setOnAction(e->{
+                _model.recreate();
+            });
+            resetVbox.getChildren().addAll(title,  rsImageContainer,caption1,caption2,caption3, confirmButton);
+            _mainLayout.setCenter(resetVbox);
         });
         playButton.setOnAction(event ->{
             SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);
