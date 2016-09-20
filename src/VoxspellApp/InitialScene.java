@@ -29,7 +29,9 @@ public class InitialScene {
     private Button _newGameButton;
     private Button _reviewGameButton;
     private Button _statisticsButton;
+    private Button _resetButton;
     private Button playButton;
+
 
     private int _level;
     private Mode _mode = Mode.NEW;
@@ -82,9 +84,10 @@ public class InitialScene {
         _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
         _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
         _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
+        _resetButton = new Button("Reset");
 
         menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
-        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton);
+        menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, _resetButton);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
 
@@ -214,6 +217,9 @@ public class InitialScene {
         _statisticsButton.setOnAction(event -> {
             StatisticsScene graphScene = new StatisticsScene(_model);
             _mainLayout.setCenter(graphScene.createScene());//set center pane to the StatisticsScene's layout node
+        });
+        _resetButton.setOnAction(event -> {
+            _model.recreate();
         });
         playButton.setOnAction(event ->{
             SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);

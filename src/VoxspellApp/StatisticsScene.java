@@ -172,7 +172,7 @@ public class StatisticsScene {
         barGraph.setCategoryGap(25);
         //barGraph.setStyle("-fx-font-size: 18px");//set font size of axis
 
-        return barGraph;//TODO sort word by alphabetical?
+        return barGraph;
     }
 
     private void drawBarLabels(XYChart.Data<Number, String> data) {

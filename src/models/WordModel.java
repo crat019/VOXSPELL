@@ -1,8 +1,13 @@
 package models;
 
+import VoxspellApp.ConfirmQuitBox;
 import VoxspellApp.Voxspell;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +25,11 @@ public class WordModel implements Resettable, Serializable {
     private List<int[]> _accuracyList;//list of int arrays showing statistic for each level
     private int[] _overallStatstic;//int array of overall frequency of each mastered(2),faulted(1),failed(0)
 
+    private String _spellingListPath;
     private File _file = new File(".voxspellData.ser");
 
     public WordModel(String spellingListPath) throws IOException{
+        _spellingListPath = spellingListPath;
         //serializble already exists; not new game
         if (_file.exists()) {
             try {
@@ -44,44 +51,49 @@ public class WordModel implements Resettable, Serializable {
                 e.printStackTrace();
             }
         } else {//new game
-            //initialise fields
-            _accuracyList = new ArrayList<int[]>();
-            _overallStatstic = new int[3];
+            makeNewModel();
+        }
+    }
 
-            int currentLevelValue = 1;
-            Level currentLevel;
-            String currentLine;
-            FileReader fr = new FileReader(spellingListPath);
-            BufferedReader br = new BufferedReader(fr);
-            currentLine = br.readLine();
+    private void makeNewModel() throws IOException{
+        //initialise fields
+        _accuracyList = new ArrayList<int[]>();
+        _overallStatstic = new int[3];
 
+        int currentLevelValue = 1;//integer used to construct level class
+        Level currentLevel;
+        String currentLine;
+        //begin reading spelling list
+        FileReader fr = new FileReader(_spellingListPath);
+        BufferedReader br = new BufferedReader(fr);
+        currentLine = br.readLine();
+        if (!currentLine.substring(0,1).equals("%")){//check if word not level
+            throw new IOException();//TODO create exception class for invalid IO of text input
+        } else {
+            currentLevel = new Level(currentLevelValue);
+            _levelList = new ArrayList<>();
+            _levelList.add(currentLevel);
+            currentLevelValue+=1;
+        }
+        while((currentLine = br.readLine())!=null){
             if (!currentLine.substring(0,1).equals("%")){//check if word not level
-                throw new IOException();//TODO create exception class for invalid IO of text input
+                currentLevel.addWord(currentLine);//add to level object
             } else {
                 currentLevel = new Level(currentLevelValue);
-                _levelList = new ArrayList<>();
                 _levelList.add(currentLevel);
                 currentLevelValue+=1;
             }
-            while((currentLine = br.readLine())!=null){
-                if (!currentLine.substring(0,1).equals("%")){//check if word not level
-                    currentLevel.addWord(currentLine);//add to level object
-                } else {
-                    currentLevel = new Level(currentLevelValue);
-                    _levelList.add(currentLevel);
-                    currentLevelValue+=1;
-                }
 
-            }
+        }
 
+        _totalLevels = _levelList.size();//set the number of levels
+        _accessLevel = 1;//reset highest accessible level to 1
 
-            _totalLevels = _levelList.size();
-
-            _accessStats = new boolean[_totalLevels];
-            for(int i = 0; i < _accessStats.length; i++){
-                _accuracyList.add(new int[3]);//initialise accuracy stats for each level
-                _accessStats[i] = false;//set accessible to all level stats to false
-            }
+        //create boolean array showing which levels are accessible in statistics
+        _accessStats = new boolean[_totalLevels];
+        for(int i = 0; i < _accessStats.length; i++){
+            _accuracyList.add(new int[3]);//initialise accuracy stats for each level
+            _accessStats[i] = false;//set accessible to all level stats to false
         }
     }
 
@@ -92,14 +104,6 @@ public class WordModel implements Resettable, Serializable {
             level.reset();
         }
         _overallStatstic=new int[3];
-    }
-
-    //sort the words in each level for the bar graph
-    public void sort(){
-        //sort the words in the level lists alphabetically
-        for (Level level : _levelList){
-            level.sort();
-        }
     }
 
     /**
@@ -190,5 +194,26 @@ public class WordModel implements Resettable, Serializable {
         } catch (IOException e) {
 
         }
+    }
+
+    public void recreate(){
+        try{
+            Files.delete(Paths.get(".voxspellData.ser"));//delete the ser file
+        } catch (NoSuchFileException x){
+            //do nothing; if user presses repeat reset this will be caught
+        } catch (IOException x){
+            //possibly file permissions error
+            ConfirmQuitBox quitBox = new ConfirmQuitBox();
+            quitBox.display("Corrupted History", "The history is corrupted. Quit the program?");
+        } finally {
+            try {
+                makeNewModel();//make new model
+            } catch (IOException x){
+                ConfirmQuitBox quitBox = new ConfirmQuitBox();
+                quitBox.display("Corrupted Spelling List", "Spelling list is corrupted. Quit the program?");
+
+            }
+        }
+
     }
 }
