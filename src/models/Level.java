@@ -70,6 +70,10 @@ public class Level implements Resettable, Iterable<Word>, Serializable {
        }
    }
 
+   public void sort(){
+       Collections.sort(_wordList);
+   }
+
    public int getMasterFrequency(){
        return _accuracyStats[2];
    }

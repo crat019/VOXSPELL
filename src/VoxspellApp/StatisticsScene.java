@@ -1,16 +1,26 @@
 package VoxspellApp;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.Glow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import models.Level;
 import models.Status;
 import models.Word;
@@ -34,6 +44,9 @@ public class StatisticsScene {
 
 
     private int _level;
+
+    //STYLE
+    private final Glow graphGlow = new Glow(.7);
 
 
     public StatisticsScene(WordModel model){
@@ -116,6 +129,7 @@ public class StatisticsScene {
 
     private BarChart<Number, String> createBar(String title, int level){
         Level currentLevel = _model.getLevel(level);
+        currentLevel.sort();//sort words alphabetically
         int bargraphHeight=150;
 
         final NumberAxis xAxis = new NumberAxis();
@@ -124,6 +138,7 @@ public class StatisticsScene {
         barGraph.setTitle(title);
         xAxis.setLabel("Frequency");
         yAxis.setLabel("Word");
+        yAxis.tickLabelFontProperty().set(Font.font(16));//set the y axis (words) font size
 
         XYChart.Series failSeries = new XYChart.Series();
         failSeries.setName("Failed");
@@ -134,17 +149,89 @@ public class StatisticsScene {
         XYChart.Series masterSeries = new XYChart.Series();
         masterSeries.setName("Mastered");
 
+        //loop through each word in the current level
         for (Word word: currentLevel){
             if (word.getStatus() != Status.Unseen){
-                bargraphHeight+=75;
+                bargraphHeight+=80;//incremement height for each word addition
                 //add data poitns with first param being word count and second being word string form
-                failSeries.getData().add(new XYChart.Data(word.getStat(0), word.getWord()));
-                faultSeries.getData().add(new XYChart.Data(word.getStat(1), word.getWord()));
-                masterSeries.getData().add(new XYChart.Data(word.getStat(2), word.getWord()));
+                final XYChart.Data<Number, String> failData = new XYChart.Data(word.getStat(0), word.getWord());
+                drawBarLabels(failData);
+                final XYChart.Data<Number, String> faultData = new XYChart.Data(word.getStat(1), word.getWord());
+                drawBarLabels(faultData);
+                final XYChart.Data<Number, String> masterData = new XYChart.Data(word.getStat(2), word.getWord());
+                drawBarLabels(masterData);
+                failSeries.getData().add(failData);
+                faultSeries.getData().add(faultData);
+                masterSeries.getData().add(masterData);
             }
         }
+
+
         barGraph.getData().addAll(failSeries, faultSeries, masterSeries);
         barGraph.setMinHeight(bargraphHeight);
+        barGraph.setCategoryGap(25);
+        //barGraph.setStyle("-fx-font-size: 18px");//set font size of axis
+
         return barGraph;//TODO sort word by alphabetical?
+    }
+
+    private void drawBarLabels(XYChart.Data<Number, String> data) {
+        data.nodeProperty().addListener(new ChangeListener<Node>() {
+            @Override
+            public void changed(ObservableValue<? extends Node> observable, Node oldValue, final Node newValue) {
+                if (newValue != null) {
+                    final Node dataNode = data.getNode();
+                    final Text text = new Text(data.getXValue()+"");
+
+                    dataNode.parentProperty().addListener(new ChangeListener<Parent>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Parent> observable, Parent oldValue, Parent newValue) {
+                            Group parentGroup = (Group) newValue;
+                            parentGroup.getChildren().add(text);
+
+                        }
+                    });
+                    dataNode.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
+                            //set position of count label on bar graph
+                            text.setLayoutX(Math.round(newValue.getMinX()+newValue.getWidth()/2-text.prefWidth(-1)/2)*2+15);//set x position
+                            text.setLayoutY(Math.round(newValue.getMinY()-text.prefHeight(-1)*0.5)+20);//set y position
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+            /*
+            dataNode.setEffect(null);
+            dataNode.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    dataNode.setEffect(graphGlow);
+                    dataText.setTranslateX(event.getSceneX());
+                    dataText.setTranslateY(event.getSceneY());
+                }
+            });
+            dataNode.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    dataNode.setEffect(null);//when mouse hover off, no longer glow
+                }
+            });
+            dataNode.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    dataNode.setEffect(graphGlow);
+                    dataText.setTranslateX(event.getSceneX());
+                    dataText.setTranslateY(event.getSceneY());
+                    dataText.setText(text);
+                }
+            });
+            */
+
+
     }
 }
