@@ -124,7 +124,7 @@ public class VideoPlayer {
         group.getChildren().addAll(view, vbox);
         Scene scene = new Scene(group, 400, 400);
         window.setScene(scene);
-        window.setResizable(false);//disable resizing video window
+        //window.setResizable(false);//disable resizing video window
 
         _player.play();
         _player.setOnReady(new Runnable() {
