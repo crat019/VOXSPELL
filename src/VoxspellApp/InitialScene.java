@@ -147,6 +147,7 @@ public class InitialScene {
                 Festival.getVoiceList()
         );
         _voiceOptionCombo.setStyle("-fx-font: 22 arial;");
+        _voiceOptionCombo.setValue("kal_diphone");
         GridPane.setConstraints(_voiceOptionCombo, 1, 1);
 
         gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo);

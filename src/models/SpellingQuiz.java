@@ -1,5 +1,6 @@
 package models;
 
+import VoxspellApp.SpellingQuizScene;
 import javafx.concurrent.Task;
 
 import java.util.List;
@@ -18,6 +19,11 @@ public class SpellingQuiz {
     private Status _status;
     private boolean _finished;
     private String _phrase;
+    private SpellingQuizScene _quizScene;
+
+    public SpellingQuiz(SpellingQuizScene scene) {
+        _quizScene = scene;
+    }
 
     public void setUpSpellingQuiz(WordModel wordModel) {
         this._wordModel = wordModel;
@@ -102,6 +108,11 @@ public class SpellingQuiz {
             }
         };
 
+        _festivalTask.setOnSucceeded(event -> {
+            _quizScene.endThreadState();
+        });
+
+        _quizScene.startThreadState();
         new Thread(_festivalTask).start();
     }
 
