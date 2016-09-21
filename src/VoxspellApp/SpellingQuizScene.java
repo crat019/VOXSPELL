@@ -31,6 +31,7 @@ public class SpellingQuizScene {
 
     private SpellingQuiz _quiz = new SpellingQuiz(this);
     private WordModel _wordModel;
+    private boolean _review;
 
     //SCENE
     private Stage _window;
@@ -82,10 +83,11 @@ public class SpellingQuizScene {
      * will be passed onto the new spelling quiz.
      * @param wordModel
      */
-    public SpellingQuizScene(WordModel wordModel, Stage window) {
+    public SpellingQuizScene(WordModel wordModel, Stage window, boolean review) {
 
         this._wordModel = wordModel;
         this._window = window;
+        this._review = review;
         setUpGui();
         setUpEventHandelers();
     }
@@ -166,21 +168,20 @@ public class SpellingQuizScene {
         _buttonArea.getChildren().addAll(_repeatButton,_definitionButton,_settingsButton);
     }
 
+    public void addCircles(int number) {
+        createCircles(number);
+        _resultsArea.getChildren().addAll(_circleList);
+    }
+
     private void setUpResultsArea() {
         _resultsArea.setSpacing(20);
         _resultsArea.setPadding(new Insets(50));
         _resultsArea.setPrefHeight(100);
         _resultsArea.setAlignment(Pos.CENTER);
-
-        createCircles();
-
-        _resultsArea.getChildren().addAll(_circleList);
-
-
     }
 
-    private void createCircles() {
-        for (int i = 0; i < Voxspell.COUNT; i++) {
+    private void createCircles(int number) {
+        for (int i = 0; i < number; i++) {
             Circle circle = new Circle(20);
             circle.setStyle("-fx-fill: #c2c2c2;");
             _circleList.add(circle);
@@ -334,7 +335,7 @@ public class SpellingQuizScene {
                 _definitionButton.setDisable(false);
                 _inputText.clear();
                 _submitButton.setDisable(false);
-                _quiz.setUpSpellingQuiz(_wordModel);
+                _quiz.setUpSpellingQuiz(_wordModel,_review);
             }
         });
 

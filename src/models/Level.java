@@ -3,6 +3,7 @@ package models;
 
 import VoxspellApp.Voxspell;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,15 +20,27 @@ public class Level implements Resettable, Iterable<Word>, Serializable {
     private int _level;
     private int[] _accuracyStats;
     private List<Word> _wordList;
+    private List<Word> _failedList;
 
     public Level(int level){
         _wordList = new ArrayList<Word>();
+        _failedList = new ArrayList<Word>();
         _level = level;
         _accuracyStats = new int[3];
     }
 
     protected void addWord(String word){
         _wordList.add(new Word(word));
+    }
+
+    protected void addFailedWord(Word word) {
+        if (!_failedList.contains(word)) {
+            _failedList.add(word);
+        }
+    }
+
+    protected void removeFailedWord(Word word) {
+        _failedList.remove(word);
     }
 
     public void reset(){
@@ -42,14 +55,23 @@ public class Level implements Resettable, Iterable<Word>, Serializable {
      * with less than 10 words.
      * @return List<Word>
      */
-   public List<Word> getWords() {
-       Collections.shuffle(_wordList);
-       if (_wordList.size() < Voxspell.COUNT) {
-           return _wordList;
+   public List<Word> getWords(boolean review) {
+       if (review) {
+           Collections.shuffle(_failedList);
+           return selectWords(_failedList);
+       } else {
+           Collections.shuffle(_wordList);
+           return selectWords(_wordList);
+       }
+   }
+
+   private List<Word> selectWords(List<Word> wordList) {
+       if (wordList.size() < Voxspell.COUNT) {
+           return wordList;
        } else {
            List<Word> selectedWords = new ArrayList<Word>(Voxspell.COUNT);
            for (int i = 0; i < Voxspell.COUNT; i++) {
-               selectedWords.add(_wordList.get(i));
+               selectedWords.add(wordList.get(i));
            }
            return selectedWords;
        }
@@ -91,5 +113,9 @@ public class Level implements Resettable, Iterable<Word>, Serializable {
     public Iterator<Word> iterator(){
         Iterator<Word> wordIterator = _wordList.iterator();
         return wordIterator;
+    }
+
+    public List<Word> getFailedList() {
+        return this._failedList;
     }
 }

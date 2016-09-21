@@ -145,9 +145,9 @@ public class WordModel implements Resettable, Serializable {
         return _overallStatstic;
     }
 
-    public List<Word> getSpellingList() {
+    public List<Word> getSpellingList(boolean review) {
         Level level = _levelList.get(_currentLevel-1);
-        return level.getWords();
+        return level.getWords(review);
     }
     /*
     public int getAccessLevel(){
