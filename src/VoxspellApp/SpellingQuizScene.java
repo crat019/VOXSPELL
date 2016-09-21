@@ -31,6 +31,7 @@ public class SpellingQuizScene {
 
     private SpellingQuiz _quiz = new SpellingQuiz(this);
     private WordModel _wordModel;
+    private boolean _review;
 
     //SCENE
     private Stage _window;
@@ -50,7 +51,7 @@ public class SpellingQuizScene {
     private TextField _inputText = new TextField();
     private Label _levelTitle = new Label();
     private Label _congratsTitle = new Label();
-    private Label _voice = new Label();
+    private Label _modeTitle = new Label();
 
     //BUTTONS
     private Button _submitButton = new Button("Submit");
@@ -82,10 +83,11 @@ public class SpellingQuizScene {
      * will be passed onto the new spelling quiz.
      * @param wordModel
      */
-    public SpellingQuizScene(WordModel wordModel, Stage window) {
+    public SpellingQuizScene(WordModel wordModel, Stage window, boolean review) {
 
         this._wordModel = wordModel;
         this._window = window;
+        this._review = review;
         setUpGui();
         setUpEventHandelers();
     }
@@ -137,10 +139,14 @@ public class SpellingQuizScene {
         _levelTitle.setText("Level: " + _wordModel.getCurrentLevel());
         _levelTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
 
-        _voice.setText("Voice");
-        _voice.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        if (_review) {
+            _modeTitle.setText("Review Quiz");
+        } else {
+            _modeTitle.setText("New Quiz");
+        }
+        _modeTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
 
-        _statusArea.getChildren().addAll(_startQuizButton,_levelTitle,_voice);
+        _statusArea.getChildren().addAll(_startQuizButton,_levelTitle,_modeTitle);
     }
 
     private void setUpButtonArea() {
@@ -166,21 +172,20 @@ public class SpellingQuizScene {
         _buttonArea.getChildren().addAll(_repeatButton,_definitionButton,_settingsButton);
     }
 
+    public void addCircles(int number) {
+        createCircles(number);
+        _resultsArea.getChildren().addAll(_circleList);
+    }
+
     private void setUpResultsArea() {
         _resultsArea.setSpacing(20);
         _resultsArea.setPadding(new Insets(50));
         _resultsArea.setPrefHeight(100);
         _resultsArea.setAlignment(Pos.CENTER);
-
-        createCircles();
-
-        _resultsArea.getChildren().addAll(_circleList);
-
-
     }
 
-    private void createCircles() {
-        for (int i = 0; i < Voxspell.COUNT; i++) {
+    private void createCircles(int number) {
+        for (int i = 0; i < number; i++) {
             Circle circle = new Circle(20);
             circle.setStyle("-fx-fill: #c2c2c2;");
             _circleList.add(circle);
@@ -280,6 +285,28 @@ public class SpellingQuizScene {
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_stayButton,_mainMenu);
     }
 
+    private void setUpReviewGui() {
+        _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
+        _mainLayout.setAlignment(Pos.CENTER);
+        _mainLayout.setSpacing(20);
+
+        _congratsStatusArea.setSpacing(50);
+        _congratsStatusArea.setPadding(new Insets(20));
+        _congratsStatusArea.setAlignment(Pos.CENTER);
+
+        _congratsTitle.setText("Thanks for reviewing Level: " + _wordModel.getCurrentLevel());
+        _congratsTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+
+        _congratsStatusArea.getChildren().removeAll(_congratsTitle);
+        _congratsStatusArea.getChildren().addAll(_congratsTitle);
+
+        _mainMenu.setMinWidth(300);
+        _mainMenu.setMinHeight(25);
+        _mainMenu.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+
+        _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_mainMenu);
+    }
+
     private void submitHandler() {
         String text = _inputText.getText();
         _inputText.clear();
@@ -296,7 +323,9 @@ public class SpellingQuizScene {
             _submitButton.setDisable(true);
             _inputText.setDisable(true);
             //TODO delete _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
-            if ((double)_numberMastered/Voxspell.COUNT >= 0.9) {
+            if (_review) {
+                setUpReviewGui();
+            } else if ((double)_numberMastered/Voxspell.COUNT >= 0.9) {
                 setUpRewardGui();
             } else {
                 setUpFailedGui();
@@ -334,7 +363,7 @@ public class SpellingQuizScene {
                 _definitionButton.setDisable(false);
                 _inputText.clear();
                 _submitButton.setDisable(false);
-                _quiz.setUpSpellingQuiz(_wordModel);
+                _quiz.setUpSpellingQuiz(_wordModel,_review);
             }
         });
 
@@ -429,6 +458,7 @@ public class SpellingQuizScene {
         _submitButton.setGraphic(new ImageView(_loadingIcon));
         _submitButton.setOpacity(100);
         _submitButton.setAlignment(Pos.CENTER);
+        _repeatButton.setDisable(true);
     }
 
     public void endThreadState() {
@@ -439,6 +469,7 @@ public class SpellingQuizScene {
         _submitButton.setText("Submit");
         _submitButton.setGraphic(null);
         _submitButton.setOpacity(_submitButtonOpacity);
+        _repeatButton.setDisable(false);
     }
 
 

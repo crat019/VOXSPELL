@@ -25,6 +25,7 @@ public class InitialScene {
     private Stage _window;
     private Scene _mainScene;//background scene of primary window
     private BorderPane _mainLayout;
+    private boolean _review = false;
 
     //Buttons
     private ToggleGroup _menuGroup;
@@ -184,6 +185,12 @@ public class InitialScene {
             //    levelButton.setDisable(true);
             //}
 
+            if (_review) {
+                if (_model.getLevel(i-1).getFailedList().size() == 0) {
+                    levelButton.setDisable(true);
+                }
+            }
+
             levelButton.setToggleGroup(levelGroup);
             levelHBox.getChildren().add(levelButton);
 
@@ -205,10 +212,12 @@ public class InitialScene {
 
     private void setupEventHandlers(){
         _newGameButton.setOnAction(event -> {
+            _review = false;
             _mainLayout.setCenter(setGameScene());
             _mode=Mode.NEW;
         });
         _reviewGameButton.setOnAction(event -> {
+            _review = true;
             _mainLayout.setCenter(setGameScene());
             _mode=Mode.REVIEW;
         });
@@ -238,7 +247,7 @@ public class InitialScene {
             _mainLayout.setCenter(resetVbox);
         });
         playButton.setOnAction(event ->{
-            SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);
+            SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window, _review);
             Scene newGameScene = newGameSceneCreator.createScene();
             _window.setScene(newGameScene);
         });
