@@ -74,6 +74,8 @@ public class SpellingQuizScene {
     Image _loadingIcon = new Image("MediaResources/loaderSpinner.gif", 25, 25, false, false);
     double _submitButtonOpacity;
 
+
+
     /**
      * This is the constructor for the spelling quiz scene. This will call the set up gui method
      * so the gui is set up and also it will call a method to start a new spelling quiz. The wordModel
@@ -417,6 +419,26 @@ public class SpellingQuizScene {
 
             }
         });
+    }
+
+    public void startThreadState() {
+        _inputText.setDisable(true);
+        _inputText.setText("PLEASE WAIT...");
+        _submitButton.setDisable(true);
+        _submitButton.setText("");
+        _submitButton.setGraphic(new ImageView(_loadingIcon));
+        _submitButton.setOpacity(100);
+        _submitButton.setAlignment(Pos.CENTER);
+    }
+
+    public void endThreadState() {
+        _inputText.setDisable(false);
+        _inputText.setText("");
+        _inputText.requestFocus();
+        _submitButton.setDisable(false);
+        _submitButton.setText("Submit");
+        _submitButton.setGraphic(null);
+        _submitButton.setOpacity(_submitButtonOpacity);
     }
 
     public void startThreadState() {
