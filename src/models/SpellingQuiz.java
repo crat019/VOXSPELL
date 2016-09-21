@@ -38,7 +38,6 @@ public class SpellingQuiz {
         _failedWordsToMove = new ArrayList<Word>();
         _spellingList = _wordModel.getSpellingList(_review);
         _quizScene.addCircles(_spellingList.size());
-        System.out.println(_spellingList.size());
         _phrase = "";
         spellingLogic("");
     }
@@ -54,7 +53,7 @@ public class SpellingQuiz {
         } else if (!_attemptFlag) {
             //correct on first try
             if (_spellingList.get(_position).compareWords(userinput)) {
-                _phrase = "Correct..";
+                _phrase = "Correct .";
                 _spellingList.get(_position).countUp(Status.Mastered);
                 if (_review) {
                     _failedWordsToMove.add(_spellingList.get(_position));
@@ -62,7 +61,7 @@ public class SpellingQuiz {
                 _position++;
                 _status = Status.Mastered;
             } else {
-                _phrase = "Incorrect.. Please Try Again.. " + _spellingList.get(_position).getWord() + "... " +  _spellingList.get(_position).getWord();
+                _phrase = "Incorrect . Please Try Again . " + _spellingList.get(_position).getWord() + " . " +  _spellingList.get(_position).getWord();
                 startFestivalThread(_phrase);
                 System.out.println(_phrase);
                 _attemptFlag = true;
@@ -72,12 +71,12 @@ public class SpellingQuiz {
         } else {
             //correct on second try
             if (_spellingList.get(_position).compareWords(userinput)) {
-                _phrase = "Correct..";
+                _phrase = "Correct .";
                 _spellingList.get(_position).countUp(Status.Faulted);
                 _status = Status.Faulted;
             } else {
                 //incorrect on both tries
-                _phrase = "Incorrect..";
+                _phrase = "Incorrect .";
                 _spellingList.get(_position).countUp(Status.Failed);
                 if (!_review) {
                     _wordModel.getLevelList().get(_wordModel.getCurrentLevel()-1).addFailedWord(_spellingList.get(_position));

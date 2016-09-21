@@ -76,7 +76,7 @@ public class VoiceChangePopup {
             }
         });
         _applyButton.setOnAction(e->{
-            Festival.changeVoice(_oldVoice);
+            Festival.changeVoice(_voiceOption);
             _applyButton.setDisable(true);
         });
         _cancelButton.setOnAction(e->{
