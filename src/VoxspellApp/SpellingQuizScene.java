@@ -59,7 +59,7 @@ public class SpellingQuizScene {
     private Button _settingsButton = new Button("Settings");
     private Button _repeatButton = new Button("Repeat");
     private Button _definitionButton = new Button("Definition");
-    private Button _videoButton  = new Button("Video");
+    private Button _videoButton  = new Button("Watch Video");
     private Button _stayButton = new Button("Stay");
     private Button _nextLevelButton = new Button("Next Level");
     private Button _mainMenu = new Button("Main Menu");
@@ -111,16 +111,17 @@ public class SpellingQuizScene {
     private void setUpTextArea() {
         _textArea.setSpacing(20);
         _textArea.setPadding(new Insets(20));
+        _textArea.setAlignment(Pos.CENTER);
 
-        _inputText.setMinWidth(840);
+        _inputText.setMinWidth(700);
         _inputText.setMinHeight(50);
         _inputText.setText("Press Start Quiz To Start Your Quiz!!");
-        _inputText.setStyle("-fx-font: 18 arial");
+        _inputText.setStyle("-fx-font: 20 arial; -fx-background-radius: 10 10 10 10;");
         _inputText.setDisable(true);
 
         _submitButton.setMinWidth(100);
         _submitButton.setMinHeight(50);
-        _submitButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _submitButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10;");
         _submitButtonOpacity = _submitButton.getOpacity();
         _submitButton.setDisable(true);
 
@@ -132,40 +133,37 @@ public class SpellingQuizScene {
         _statusArea.setPadding(new Insets(20));
         _statusArea.setAlignment(Pos.CENTER);
 
-        _startQuizButton.setMinWidth(150);
-        _startQuizButton.setMinHeight(50);
-        _startQuizButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
-
-        _levelTitle.setText("Level: " + _wordModel.getCurrentLevel());
-        _levelTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        _levelTitle.setText("Level " + _wordModel.getCurrentLevel());
+        _levelTitle.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9;");
 
         if (_review) {
             _modeTitle.setText("Review Quiz");
         } else {
             _modeTitle.setText("New Quiz");
         }
-        _modeTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        _modeTitle.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9;");
 
-        _statusArea.getChildren().addAll(_startQuizButton,_levelTitle,_modeTitle);
+        _statusArea.getChildren().addAll(_levelTitle,_modeTitle);
     }
 
     private void setUpButtonArea() {
         _buttonArea.setSpacing(100);
-        _buttonArea.setPadding(new Insets(50,200,50,175));
+        _buttonArea.setPadding(new Insets(50));
         _buttonArea.setPrefHeight(200);
+        _buttonArea.setAlignment(Pos.CENTER);
 
         _settingsButton.setMinWidth(150);
         _settingsButton.setMinHeight(150);
-        _settingsButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _settingsButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
 
         _definitionButton.setMinWidth(150);
         _definitionButton.setMinHeight(150);
-        _definitionButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _definitionButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
         _definitionButton.setDisable(true);
 
         _repeatButton.setMinWidth(150);
         _repeatButton.setMinHeight(150);
-        _repeatButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _repeatButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
         _repeatButton.setDisable(true);
 
 
@@ -174,17 +172,24 @@ public class SpellingQuizScene {
 
     public void addCircles(int number) {
         createCircles(number);
+        _resultsArea.getChildren().removeAll(_startQuizButton);
         _resultsArea.getChildren().addAll(_circleList);
     }
 
     private void setUpResultsArea() {
-        _resultsArea.setSpacing(20);
+        _resultsArea.setSpacing(15);
         _resultsArea.setPadding(new Insets(50));
-        _resultsArea.setPrefHeight(100);
+        _resultsArea.setPrefHeight(150);
         _resultsArea.setAlignment(Pos.CENTER);
+
+        _startQuizButton.setMinWidth(180);
+        _startQuizButton.setMinHeight(50);
+        _startQuizButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 30 30 30 30;");
+        _resultsArea.getChildren().addAll(_startQuizButton);
     }
 
     private void createCircles(int number) {
+        _circleList.clear();
         for (int i = 0; i < number; i++) {
             Circle circle = new Circle(20);
             circle.setStyle("-fx-fill: #c2c2c2;");
@@ -207,17 +212,17 @@ public class SpellingQuizScene {
     }
 
     private void reset() {
-        for (Circle circle : _circleList) {
-            circle.setStyle("-fx-fill: #c2c2c2;");
-        }
-
         _position = 0;
         _startQuizButton.setDisable(false);
         _definitionButton.setDisable(true);
         _repeatButton.setDisable(true);
         _inputText.setDisable(true);
         _submitButton.setDisable(true);
-        _levelTitle.setText("Level: " + _wordModel.getCurrentLevel());
+        _mainLayout.setSpacing(0);
+        _levelTitle.setText("Level " + _wordModel.getCurrentLevel());
+        _resultsArea.getChildren().removeAll(_circleList);
+        _resultsArea.getChildren().addAll(_startQuizButton);
+
     }
 
     private void setUpRewardGui() {
@@ -225,36 +230,36 @@ public class SpellingQuizScene {
 
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
-        _mainLayout.setSpacing(20);
+        _mainLayout.setSpacing(13);
 
         _congratsStatusArea.setSpacing(50);
         _congratsStatusArea.setPadding(new Insets(20));
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
-        _congratsTitle.setText("Congrats!! You Passed Level: " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setText("Congrats!! You Passed Level " + _wordModel.getCurrentLevel());
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);
 
-        _videoButton.setMinWidth(300);
-        _videoButton.setMinHeight(150);
-        _videoButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _videoButton.setMinWidth(200);
+        _videoButton.setMinHeight(200);
+        _videoButton.setStyle("-fx-font: bold italic 25 arial; -fx-base: #b6e7c9;-fx-background-radius: 100 100 100 100");
 
-        _nextLevelButton.setMinWidth(300);
+        _nextLevelButton.setMinWidth(250);
         _nextLevelButton.setMinHeight(25);
-        _nextLevelButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _nextLevelButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
         if (_wordModel.getCurrentLevel() >= _wordModel.getNumberOfLevels()) {
             _nextLevelButton.setDisable(true);
         }
 
-        _stayButton.setMinWidth(300);
+        _stayButton.setMinWidth(250);
         _stayButton.setMinHeight(25);
-        _stayButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
 
-        _mainMenu.setMinWidth(300);
+        _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_videoButton,_nextLevelButton,_stayButton,_mainMenu);
     }
@@ -262,25 +267,25 @@ public class SpellingQuizScene {
     private void setUpFailedGui() {
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
-        _mainLayout.setSpacing(20);
+        _mainLayout.setSpacing(13);
 
         _congratsStatusArea.setSpacing(50);
         _congratsStatusArea.setPadding(new Insets(20));
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
-        _congratsTitle.setText("Please Try Again!! You Didn't Pass Level: " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setText("Please Try Again!! You Didn't Pass Level " + _wordModel.getCurrentLevel());
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);
 
-        _stayButton.setMinWidth(300);
+        _stayButton.setMinWidth(250);
         _stayButton.setMinHeight(25);
-        _stayButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
 
-        _mainMenu.setMinWidth(300);
+        _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_stayButton,_mainMenu);
     }
@@ -288,21 +293,21 @@ public class SpellingQuizScene {
     private void setUpReviewGui() {
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
-        _mainLayout.setSpacing(20);
+        _mainLayout.setSpacing(13);
 
         _congratsStatusArea.setSpacing(50);
         _congratsStatusArea.setPadding(new Insets(20));
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
-        _congratsTitle.setText("Thanks for reviewing Level: " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: 40 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setText("Thanks for reviewing Level " + _wordModel.getCurrentLevel());
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);
 
-        _mainMenu.setMinWidth(300);
+        _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_mainMenu);
     }
