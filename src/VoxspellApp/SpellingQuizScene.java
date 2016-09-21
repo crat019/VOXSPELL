@@ -216,7 +216,7 @@ public class SpellingQuizScene {
     }
 
     private void setUpRewardGui() {
-        _wordModel.levelUp();
+        //_wordModel.levelUp();
 
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);

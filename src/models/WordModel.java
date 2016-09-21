@@ -20,7 +20,7 @@ public class WordModel implements Resettable, Serializable {
     List<Level> _levelList;//arraylist of Level objects
     private int _totalLevels;
     private  int _currentLevel;
-    private int _accessLevel = 1;//int of user's highest accessible level
+    //private int _accessLevel = 1;//int of user's highest accessible level
     private boolean[] _accessStats;
     private List<int[]> _accuracyList;//list of int arrays showing statistic for each level
     private int[] _overallStatstic;//int array of overall frequency of each mastered(2),faulted(1),failed(0)
@@ -39,7 +39,7 @@ public class WordModel implements Resettable, Serializable {
                     _levelList = wordModel.getLevelList();
                     _totalLevels = wordModel.getTotalLevels();
                     _currentLevel = wordModel.getCurrentLevel();
-                    _accessLevel = wordModel.getAccessLevel();
+                    //_accessLevel = wordModel.getAccessLevel();
                     _accessStats = wordModel.getAccessStats();
                     _accuracyList = wordModel.getAccuracyList();
                     _overallStatstic = wordModel.getOverall();
@@ -87,7 +87,7 @@ public class WordModel implements Resettable, Serializable {
         }
 
         _totalLevels = _levelList.size();//set the number of levels
-        _accessLevel = 1;//reset highest accessible level to 1
+        //_accessLevel = 1;//reset highest accessible level to 1
 
         //create boolean array showing which levels are accessible in statistics
         _accessStats = new boolean[_totalLevels];
@@ -133,11 +133,13 @@ public class WordModel implements Resettable, Serializable {
         this._currentLevel = level;
     }
 
+    /*
     public void levelUp(){
         if (_accessLevel != Voxspell.COUNT && _currentLevel == _accessLevel){
             _accessLevel++;
         }
     }
+    */
 
     public int[] getOverall(){
         return _overallStatstic;
@@ -147,10 +149,11 @@ public class WordModel implements Resettable, Serializable {
         Level level = _levelList.get(_currentLevel-1);
         return level.getWords();
     }
-
+    /*
     public int getAccessLevel(){
         return _accessLevel;
     }
+    */
 
     public Level getLevel(int level){
         return _levelList.get(level);

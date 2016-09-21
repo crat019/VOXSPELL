@@ -180,9 +180,9 @@ public class InitialScene {
                 _model.updateLevel(1);
             }
             //disable if user has no access to level
-            if (i > _model.getAccessLevel()){
-                levelButton.setDisable(true);
-            }
+            //if (i > _model.getAccessLevel()){
+            //    levelButton.setDisable(true);
+            //}
 
             levelButton.setToggleGroup(levelGroup);
             levelHBox.getChildren().add(levelButton);
