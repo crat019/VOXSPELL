@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  */
 public class SpellingQuizScene {
 
-    private SpellingQuiz _quiz = new SpellingQuiz();
+    private SpellingQuiz _quiz = new SpellingQuiz(this);
     private WordModel _wordModel;
 
     //SCENE
@@ -65,6 +66,10 @@ public class SpellingQuizScene {
     private ArrayList<Circle> _circleList = new ArrayList<Circle>();
     private int _position;
     private int _numberMastered;
+
+    //IMAGE
+    Image _loadingIcon = new Image("MediaResources/loaderSpinner.gif", 25, 25, false, false);
+    double _submitButtonOpacity;
 
     /**
      * This is the constructor for the spelling quiz scene. This will call the set up gui method
@@ -108,6 +113,7 @@ public class SpellingQuizScene {
         _submitButton.setMinWidth(100);
         _submitButton.setMinHeight(50);
         _submitButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        _submitButtonOpacity = _submitButton.getOpacity();
         _submitButton.setDisable(true);
 
         _textArea.getChildren().addAll(_inputText,_submitButton);
@@ -368,6 +374,26 @@ public class SpellingQuizScene {
                 video.display();
             }
         });
+    }
+
+    public void startThreadState() {
+        _inputText.setDisable(true);
+        _inputText.setText("PLEASE WAIT...");
+        _submitButton.setDisable(true);
+        _submitButton.setText("");
+        _submitButton.setGraphic(new ImageView(_loadingIcon));
+        _submitButton.setOpacity(100);
+        _submitButton.setAlignment(Pos.CENTER);
+    }
+
+    public void endThreadState() {
+        _inputText.setDisable(false);
+        _inputText.setText("");
+        _inputText.requestFocus();
+        _submitButton.setDisable(false);
+        _submitButton.setText("Submit");
+        _submitButton.setGraphic(null);
+        _submitButton.setOpacity(_submitButtonOpacity);
     }
 
     public Scene createScene() {
