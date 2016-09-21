@@ -182,7 +182,7 @@ public class SpellingQuizScene {
         _resultsArea.setPrefHeight(150);
         _resultsArea.setAlignment(Pos.CENTER);
 
-        _startQuizButton.setMinWidth(200);
+        _startQuizButton.setMinWidth(180);
         _startQuizButton.setMinHeight(50);
         _startQuizButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 30 30 30 30;");
         _resultsArea.getChildren().addAll(_startQuizButton);

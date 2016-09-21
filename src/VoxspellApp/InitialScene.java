@@ -177,6 +177,7 @@ public class InitialScene {
         HBox levelHBox = new HBox();
         levelHBox.setSpacing(5);
         ToggleGroup levelGroup = new ToggleGroup();
+        boolean reviewExists = false;
         for (int i = 1; i <maxLevel+1 ; i++){
             ToggleButton levelButton = new ToggleButton();
             levelButton.setPrefHeight(50);
@@ -201,6 +202,10 @@ public class InitialScene {
             if (_review) {
                 if (_model.getLevel(i-1).getFailedList().size() == 0) {
                     levelButton.setDisable(true);
+                } else if (!reviewExists) {
+                    reviewExists = true;
+                    levelButton.setSelected(true);
+                    _model.updateLevel(i);
                 }
             }
 
@@ -208,6 +213,13 @@ public class InitialScene {
             levelHBox.getChildren().add(levelButton);
 
         }
+
+        if (!reviewExists && _review) {
+            playButton.setDisable(true);
+        } else {
+            playButton.setDisable(false);
+        }
+
         levelGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
