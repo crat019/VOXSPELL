@@ -25,7 +25,7 @@ import models.WordModel;
 import java.util.ArrayList;
 
 /**
- * Created by ratterz on 16/09/16.
+ * Created by ratterz on 16/09/16..
  */
 public class SpellingQuizScene {
 
