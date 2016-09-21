@@ -83,6 +83,10 @@ public class MenuPopup {
             _menuStatus = MenuStatus.EXIT;
             _window.close();
         });
+        _backButton.setOnAction(e->{
+            _menuStatus = MenuStatus.BACK;
+            _window.close();
+        });
     }
 
 }

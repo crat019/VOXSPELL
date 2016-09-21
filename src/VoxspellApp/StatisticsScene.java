@@ -39,6 +39,7 @@ public class StatisticsScene {
     private Scene _statsScene;
     private BorderPane _bgLayout;
     private WordModel _model;
+    private ScrollPane _menu;
     private ScrollPane _graphSceneLayout;
     private int _bargraphHeight;
 
@@ -87,6 +88,7 @@ public class StatisticsScene {
             optionLayout.getChildren().add(link);//add to menu vbox
         }
         optionLayout.setAlignment(Pos.CENTER);//set nodes to center of vbox
+        _menu = new ScrollPane(optionLayout);
 
         VBox graphLayout = new VBox(80);
         //TODO VBox add pie graph of overall statistic
@@ -95,7 +97,7 @@ public class StatisticsScene {
         _graphSceneLayout.setStyle("-fx-background-color: transparent;");
 
         _bgLayout = new BorderPane();
-        _bgLayout.setLeft(optionLayout);
+        _bgLayout.setLeft(_menu);
         _bgLayout.setCenter(_graphSceneLayout);
         _bgLayout.getStylesheets().add("VoxspellApp/LayoutStyles");
 

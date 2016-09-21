@@ -390,15 +390,22 @@ public class SpellingQuizScene {
                     StatisticsScene statsCreator = new StatisticsScene(_wordModel);
                     VBox vbox = new VBox();
                     vbox.getChildren().addAll(statsCreator.createScene());
+                    BackgroundImage statsBg = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
+                            BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                    vbox.setBackground(new Background(statsBg));
                     Scene scene = new Scene(vbox, 800, 480);
                     statsPopup.setScene(scene);
                     statsPopup.showAndWait();
 
                 } else if (option == MenuStatus.MAIN){
+                    Stage stage = Stage.class.cast(_mainScene.getWindow());
+                    InitialScene initialScene = new InitialScene(stage, _wordModel);
+                    stage.setScene(initialScene.createScene());
 
                 } else if (option == MenuStatus.EXIT){
-
-                } else if (option == MenuStatus.BACK){
+                    Stage stage = Stage.class.cast(_mainScene.getWindow());
+                    _wordModel.saveData();
+                    stage.close();
 
                 }
 
