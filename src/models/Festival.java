@@ -96,4 +96,8 @@ public class Festival {
     public static ArrayList<String> getVoiceList() {
         return _voiceList;
     }
+
+    public static String _getVoice(){
+        return _currentVoice;
+    }
 }

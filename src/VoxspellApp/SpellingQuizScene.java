@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Festival;
 import models.SpellingQuiz;
@@ -67,9 +68,13 @@ public class SpellingQuizScene {
     private int _position;
     private int _numberMastered;
 
+    private MenuPopup _menu;
+
     //IMAGE
     Image _loadingIcon = new Image("MediaResources/loaderSpinner.gif", 25, 25, false, false);
     double _submitButtonOpacity;
+
+
 
     /**
      * This is the constructor for the spelling quiz scene. This will call the set up gui method
@@ -90,6 +95,7 @@ public class SpellingQuizScene {
         setUpTextArea();
         setUpButtonArea();
         setUpResultsArea();
+        _menu = new MenuPopup();
         _mainLayout.setPadding(new Insets(20));
         _mainLayout.getChildren().addAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         BackgroundImage menuBackground = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
@@ -279,6 +285,7 @@ public class SpellingQuizScene {
         _inputText.clear();
         _quiz.spellingLogic(text);
         updateCircle(_quiz.getStatus());
+        _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
         isFinished();
     }
 
@@ -288,7 +295,7 @@ public class SpellingQuizScene {
             _definitionButton.setDisable(true);
             _submitButton.setDisable(true);
             _inputText.setDisable(true);
-            _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
+            //TODO delete _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
             if ((double)_numberMastered/Voxspell.COUNT >= 0.9) {
                 setUpRewardGui();
             } else {
@@ -374,6 +381,44 @@ public class SpellingQuizScene {
                 video.display();
             }
         });
+
+        _settingsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                _menu = new MenuPopup();
+                MenuStatus option = _menu.display();
+                if (option == MenuStatus.VOICE){
+                    VoiceChangePopup voiceOptionMenu = new VoiceChangePopup();
+                    voiceOptionMenu.display();
+                } else if (option == MenuStatus.STATS){
+                    Stage statsPopup = new Stage();
+                    statsPopup.initModality(Modality.APPLICATION_MODAL);
+                    statsPopup.setTitle("Statistics");
+
+                    StatisticsScene statsCreator = new StatisticsScene(_wordModel);
+                    VBox vbox = new VBox();
+                    vbox.getChildren().addAll(statsCreator.createScene());
+                    BackgroundImage statsBg = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
+                            BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                    vbox.setBackground(new Background(statsBg));
+                    Scene scene = new Scene(vbox, 800, 480);
+                    statsPopup.setScene(scene);
+                    statsPopup.showAndWait();
+
+                } else if (option == MenuStatus.MAIN){
+                    Stage stage = Stage.class.cast(_mainScene.getWindow());
+                    InitialScene initialScene = new InitialScene(stage, _wordModel);
+                    stage.setScene(initialScene.createScene());
+
+                } else if (option == MenuStatus.EXIT){
+                    Stage stage = Stage.class.cast(_mainScene.getWindow());
+                    _wordModel.saveData();
+                    stage.close();
+
+                }
+
+            }
+        });
     }
 
     public void startThreadState() {
@@ -395,6 +440,9 @@ public class SpellingQuizScene {
         _submitButton.setGraphic(null);
         _submitButton.setOpacity(_submitButtonOpacity);
     }
+
+
+
 
     public Scene createScene() {
         return this._mainScene;
