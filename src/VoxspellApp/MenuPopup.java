@@ -35,14 +35,29 @@ public class MenuPopup {
         _window.setMinWidth(125);
         _window.setResizable(false);
 
-        _layout = new VBox(5);
+        _layout = new VBox(7);
         _layout.setAlignment(Pos.CENTER);
         _layout.setPadding(new Insets(10,10,10,10));
+
         _voiceButton = createButtons("Change Voice");
+        _voiceButton.setMinWidth(125);
+        _voiceButton.setStyle("-fx-background-radius: 10 10 10 10");
+
         _statsButton = createButtons("Show Statistics");
+        _statsButton.setMinWidth(125);
+        _statsButton.setStyle("-fx-background-radius: 10 10 10 10");
+
         _mainMenuButton = createButtons("Main Menu");
+        _mainMenuButton.setMinWidth(125);
+        _mainMenuButton.setStyle("-fx-background-radius: 10 10 10 10");
+
         _exitGame = createButtons("Exit Game");
+        _exitGame.setMinWidth(125);
+        _exitGame.setStyle("-fx-background-radius: 10 10 10 10");
+
         _backButton = createButtons("Back");
+        _backButton.setMinWidth(125);
+        _backButton.setStyle("-fx-background-radius: 10 10 10 10");
 
         setupEventHandlers();
 
