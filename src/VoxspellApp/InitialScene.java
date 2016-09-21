@@ -27,10 +27,11 @@ public class InitialScene {
     private BorderPane _mainLayout;
 
     //Buttons
-    private Button _newGameButton;
-    private Button _reviewGameButton;
-    private Button _statisticsButton;
-    private Button _resetButton;
+    private ToggleGroup _menuGroup;
+    private ToggleButton _newGameButton;
+    private ToggleButton _reviewGameButton;
+    private ToggleButton _statisticsButton;
+    private ToggleButton _resetButton;
     private Button playButton;
 
 
@@ -81,13 +82,14 @@ public class InitialScene {
     private VBox setMenuScene(){
         VBox menuSceneLayout = new VBox();
         menuSceneLayout.setPrefWidth(150);//set width of menu buttons
+        _menuGroup = new ToggleGroup();
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
         _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
         _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
         _resetButton = createMenuButtons("MediaResources/newGame.png", "Reset");
 
-        menuSceneLayout.setPadding(new Insets(20));//insets: top right bottom left
+        menuSceneLayout.setPadding(new Insets(20, 10, 10, 20));//insets: top right bottom left
         menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, _resetButton);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
@@ -103,11 +105,15 @@ public class InitialScene {
      * @param caption button caption
      * @return button node
      */
-    private Button createMenuButtons(String imageName, String caption){
-        Image newGameIcon = new Image(imageName, 120, 120, false, true);//size of image
-        Button newButton = new Button(caption, new ImageView(newGameIcon));
+    private ToggleButton createMenuButtons(String imageName, String caption){
+        Image newGameIcon = new Image(imageName, 120, 100, false, true);//size of image
+        ToggleButton newButton = new ToggleButton(caption, new ImageView(newGameIcon));
         newButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
         newButton.setContentDisplay(ContentDisplay.TOP);
+        newButton.setToggleGroup(_menuGroup);
+        if (caption.equals("New Game")){
+            newButton.setSelected(true);
+        }
         return newButton;
     }
 
@@ -129,16 +135,6 @@ public class InitialScene {
         levelLabel.setStyle("-fx-font: 22 arial;");
         GridPane.setConstraints(levelLabel, 0, 0);
 
-        /*
-        //set up combo box for choosing levels
-        ComboBox levelOptionCombo = new ComboBox<String>();
-        levelOptionCombo.getItems().addAll(
-            "Level 1", "Level 2", "Level 3", "Level 4",
-                "Level 5", "Level 6", "Level 7", "Level 8",
-                "Level 9"
-        );
-        GridPane.setConstraints(levelOptionCombo, 1, 0);
-        */
         ToggleGroup levelToggles = setLevelButtons(_model.getTotalLevels(), gameGrid);
 
         Label voiceLabel = new Label("Voice");
@@ -220,7 +216,7 @@ public class InitialScene {
             _mainLayout.setCenter(graphScene.createScene());//set center pane to the StatisticsScene's layout node
         });
         _resetButton.setOnAction(event -> {
-            VBox resetVbox = new VBox(20);
+            final VBox resetVbox = new VBox(20);
             resetVbox.setPadding(new Insets(40,50,40,40));
             resetVbox.setAlignment(Pos.TOP_CENTER);
             Label title = new Label("Clear History");
@@ -229,12 +225,15 @@ public class InitialScene {
             Label caption1 = new Label("Clearing the history will remove all history statistics.");
             Label caption2 = new Label("Your highest level will be reset to level 1.");
             Label caption3 = new Label("Are you sure you want to clear the history?");
+            final Label caption4 = new Label("History Successfully Cleared.");
+            caption4.setVisible(false);
             Button confirmButton = new Button("Clear History");
 
             confirmButton.setOnAction(e->{
                 _model.recreate();
+                caption4.setVisible(true);
             });
-            resetVbox.getChildren().addAll(title,  rsImageContainer,caption1,caption2,caption3, confirmButton);
+            resetVbox.getChildren().addAll(title,  rsImageContainer,caption1,caption2,caption3, confirmButton, caption4);
             _mainLayout.setCenter(resetVbox);
         });
         playButton.setOnAction(event ->{
