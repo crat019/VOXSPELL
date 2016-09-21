@@ -8,7 +8,7 @@
     -fx-border-color: #caffd0;
     -fx-border-width: 2px;
     -fx-padding: 20;
-    -fx-spacing: 30;/*spacing between buttons */
+    -fx-spacing: 15;/*spacing between buttons */
 }
 
 .scroll-pane > .viewport {

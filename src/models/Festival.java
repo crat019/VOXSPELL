@@ -38,6 +38,8 @@ public class Festival {
             bw = new BufferedWriter(new FileWriter(".voxspellVoices.scm", true));
             bw.write(changeVoice);
             bw.newLine();
+            bw.write("(Parameter.set 'Duration_Stretch 1.2)");
+            bw.newLine();
             bw.write(sayText);
             bw.flush();
         } catch (IOException e) {
