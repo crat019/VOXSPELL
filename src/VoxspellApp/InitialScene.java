@@ -185,6 +185,12 @@ public class InitialScene {
             //    levelButton.setDisable(true);
             //}
 
+            if (_review) {
+                if (_model.getLevel(i-1).getFailedList().size() == 0) {
+                    levelButton.setDisable(true);
+                }
+            }
+
             levelButton.setToggleGroup(levelGroup);
             levelHBox.getChildren().add(levelButton);
 
