@@ -35,6 +35,11 @@ public class InitialScene {
     private ToggleButton _resetButton;
     private Button playButton;
 
+    private Label tipLabel1;
+    private Label tipLabel2;
+    private Label tipLabel3;
+    private Label tipLabel4;
+    private VBox _newTip = new VBox();
 
     private int _level;
     private Mode _mode = Mode.NEW;
@@ -148,6 +153,21 @@ public class InitialScene {
         voiceLabel.setAlignment(Pos.CENTER);
         GridPane.setConstraints(voiceLabel, 0, 3);
 
+        _newTip.setStyle("-fx-font: 16 arial");
+
+        if (_review) {
+            setUpReviewToolTip();
+        } else {
+            setUpNewToolTip();
+        }
+
+        tipLabel4.setStyle("-fx-text-fill: white");
+        tipLabel2.setStyle("-fx-text-fill: white");
+        tipLabel3.setStyle("-fx-text-fill: white");
+        tipLabel1.setStyle("-fx-text-fill: white");
+
+        GridPane.setConstraints(_newTip, 0, 5);
+
         //set up combo box for choosing levels
         _voiceOptionCombo = new ComboBox<String>();
         _voiceOptionCombo.getItems().addAll(
@@ -162,12 +182,30 @@ public class InitialScene {
         });
         GridPane.setConstraints(_voiceOptionCombo, 0, 4);
 
-        gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo);
+        gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo, _newTip);
 
-        GridPane.setConstraints(playButton, 0, 16);
+        GridPane.setConstraints(playButton, 0, 10);
         gameGrid.getChildren().add(playButton);
         return gameGrid;
 
+    }
+
+    private void setUpReviewToolTip() {
+        _newTip.getChildren().removeAll(tipLabel1,tipLabel2,tipLabel3,tipLabel4);
+        tipLabel1 = new Label("Tool Tip:");
+        tipLabel2 = new Label("This is the Review Spelling Quiz. Here we test you on any words you have failed in each level");
+        tipLabel3 = new Label("Please pick a level and then press PLAY to start that level. If all levels are locked, then");
+        tipLabel4 = new Label("you need to attempt a spelling quiz before coming back here");
+        _newTip.getChildren().addAll(tipLabel1,tipLabel2,tipLabel3,tipLabel4);
+    }
+
+    private void setUpNewToolTip() {
+        _newTip.getChildren().removeAll(tipLabel1,tipLabel2,tipLabel3,tipLabel4);
+        tipLabel1 = new Label("Tool Tip:");
+        tipLabel2 = new Label("This is the New Spelling Quiz. Here we test you on 10 words from each corresponding level");
+        tipLabel3 = new Label("Please pick a level and then press PLAY to start that level. If you wish to change the voice,");
+        tipLabel4 = new Label("click the drop down menu next to voice and then pick your voice");
+        _newTip.getChildren().addAll(tipLabel1,tipLabel2,tipLabel3,tipLabel4);
     }
 
     public Button getPlayButton(){
