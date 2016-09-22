@@ -79,6 +79,7 @@ public class SpellingQuizScene {
 
     private MenuPopup _menu;
 
+
     //IMAGE
     Image _loadingIcon = new Image("MediaResources/loaderSpinner.gif", 25, 25, false, false);
     double _submitButtonOpacity;
@@ -305,7 +306,6 @@ public class SpellingQuizScene {
 
     private void setUpRewardGui() {
         //_wordModel.levelUp();
-        setUpAccuracyHandlers();
 
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
@@ -344,7 +344,6 @@ public class SpellingQuizScene {
     }
 
     private void setUpFailedGui() {
-        setUpAccuracyHandlers();
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
         _mainLayout.setSpacing(13);
@@ -377,7 +376,6 @@ public class SpellingQuizScene {
     }
 
     private void setUpReviewGui() {
-        setUpAccuracyHandlers();
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
         _mainLayout.setSpacing(13);
@@ -422,6 +420,7 @@ public class SpellingQuizScene {
             } else {
                 setUpFailedGui();
             }
+            setUpAccuracyHandlers();
         }
     }
 
