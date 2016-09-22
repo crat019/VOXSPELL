@@ -310,7 +310,7 @@ public class SpellingQuizScene {
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
         _congratsTitle.setText("Thanks for reviewing Level " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040;");
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);

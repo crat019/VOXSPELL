@@ -3,12 +3,10 @@
  */
 
 .vbox {
-    -fx-background-size: 300, 700;
     -fx-background-repeat: no-repeat;
-    -fx-border-color: #caffd0;
-    -fx-border-width: 2px;
-    -fx-padding: 20;
-    -fx-spacing: 15;/*spacing between buttons */
+    -fx-spacing: 15;
+    -fx-padding: 15;
+    /*spacing between buttons */
 }
 
 .scroll-pane > .viewport {

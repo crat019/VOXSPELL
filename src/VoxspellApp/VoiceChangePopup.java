@@ -38,6 +38,7 @@ public class VoiceChangePopup {
         _layout = new VBox(7);
         _layout.setAlignment(Pos.CENTER);
         _layout.setPadding(new Insets(10));
+        _layout.setStyle("-fx-base: #262262;");
 
         _oldVoice = Festival._getVoice();
         _voiceCombo = new ComboBox<>();
