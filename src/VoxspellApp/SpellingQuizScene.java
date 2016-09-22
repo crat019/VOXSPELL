@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -43,6 +44,7 @@ public class SpellingQuizScene {
     private HBox _statusArea = new HBox();
     private HBox _buttonArea = new HBox();
     private HBox _resultsArea = new HBox();
+    private VBox _accuracyArea = new VBox();
 
     //CONGRATS PANE
     private HBox _congratsStatusArea = new HBox();
@@ -54,13 +56,15 @@ public class SpellingQuizScene {
     private Label _congratsTitle = new Label();
     private Label _congratsTitle2 = new Label();
     private Label _modeTitle = new Label();
+    private Label _accuracyLabel = new Label();
+    private Label _accuracyTitle = new Label();
+    private Label _accuracyHover = new Label();
 
     //BUTTONS
     private Button _submitButton = new Button("Submit");
     private Button _startQuizButton = new Button("Start Quiz");
     private Button _settingsButton = new Button("Settings");
     private Button _repeatButton = new Button("Repeat");
-    private Button _definitionButton = new Button("Definition");
     private Button _videoButton  = new Button("Watch Video");
     private Button _stayButton = new Button("Stay");
     private Button _nextLevelButton = new Button("Next Level");
@@ -70,6 +74,8 @@ public class SpellingQuizScene {
     private ArrayList<Circle> _circleList = new ArrayList<Circle>();
     private int _position;
     private int _numberMastered;
+    private double _accuracy = 0;
+    private String _savedString = "";
 
     private MenuPopup _menu;
 
@@ -149,7 +155,7 @@ public class SpellingQuizScene {
     }
 
     private void setUpButtonArea() {
-        _buttonArea.setSpacing(100);
+        _buttonArea.setSpacing(50);
         _buttonArea.setPadding(new Insets(50));
         _buttonArea.setPrefHeight(200);
         _buttonArea.setAlignment(Pos.CENTER);
@@ -158,10 +164,10 @@ public class SpellingQuizScene {
         _settingsButton.setMinHeight(150);
         _settingsButton.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
 
-        _definitionButton.setMinWidth(150);
-        _definitionButton.setMinHeight(150);
-        _definitionButton.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
-        _definitionButton.setDisable(true);
+        _accuracyArea.setMinWidth(200);
+        _accuracyArea.setMinHeight(150);
+        setUpAccuracyTitles();
+        //_accuracyArea.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
 
         _repeatButton.setMinWidth(150);
         _repeatButton.setMinHeight(150);
@@ -169,7 +175,20 @@ public class SpellingQuizScene {
         _repeatButton.setDisable(true);
 
 
-        _buttonArea.getChildren().addAll(_repeatButton,_definitionButton,_settingsButton);
+        _buttonArea.getChildren().addAll(_repeatButton,_accuracyArea,_settingsButton);
+    }
+
+    private void setUpAccuracyTitles() {
+        _accuracyArea.setPadding(new Insets(20,0,0,0));
+        _accuracyArea.setAlignment(Pos.CENTER);
+
+        _accuracyTitle.setText("Accuracy");
+        _accuracyTitle.setStyle("-fx-font: bold 20 arial;-fx-text-fill: white");
+
+        _accuracyLabel.setText("---.--%");
+        _accuracyLabel.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #fbb040");
+
+        _accuracyArea.getChildren().setAll(_accuracyTitle,_accuracyLabel);
     }
 
     public void addCircles(int number) {
@@ -203,20 +222,43 @@ public class SpellingQuizScene {
         if (status.equals(Status.Mastered)) {
             _circleList.get(_position).setStyle("-fx-fill: rgb(90,175,90);");
             _numberMastered++;
+            _accuracy++;
             _position++;
+            colorAccuracy(_accuracy/_position * 100);
         } else if (status.equals(Status.Faulted)) {
             _circleList.get(_position).setStyle("-fx-fill: rgb(230,160,40);");
             _position++;
+            colorAccuracy(_accuracy/_position * 100);
         } else if (status.equals(Status.Failed)) {
             _circleList.get(_position).setStyle("-fx-fill: rgb(225,100,50);");
             _position++;
+            colorAccuracy(_accuracy/_position * 100);
+        }
+    }
+
+    private void colorAccuracy(double percentage) {
+        _accuracyLabel.setText(String.format("%.2f", percentage)+"%");
+        _accuracyHover.setText(String.format("Accuracy: %.2f", percentage)+"%");
+        if (percentage >= 90) {
+            _accuracyLabel.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #5aaf5a");
+            _accuracyHover.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #5aaf5a");
+        } else if (percentage >= 50) {
+            _accuracyLabel.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #e6a028");
+            _accuracyHover.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #e6a028");
+        } else {
+            _accuracyLabel.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #ff6432");
+            _accuracyHover.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #ff6432");
         }
     }
 
     private void reset() {
+        resetAccuracyHandlers();
         _position = 0;
+        _accuracy = 0;
+        _accuracyLabel.setText("---.--%");
+        _accuracyLabel.setStyle("-fx-font: bold 40 arial;-fx-text-fill: #fbb040");
         _startQuizButton.setDisable(false);
-        _definitionButton.setDisable(true);
+        //_definitionButton.setText("");
         _repeatButton.setDisable(true);
         _inputText.setDisable(true);
         _inputText.setText("Press Start Quiz To Start Your Quiz!!");
@@ -229,8 +271,41 @@ public class SpellingQuizScene {
 
     }
 
+    private void setUpAccuracyHandlers() {
+        _resultsArea.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                _resultsArea.getChildren().removeAll(_circleList);
+                _resultsArea.getChildren().addAll(_accuracyHover);
+            }
+        });
+
+        _resultsArea.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                _resultsArea.getChildren().removeAll(_accuracyHover);
+                _resultsArea.getChildren().addAll(_circleList);
+            }
+        });
+    }
+
+    private void resetAccuracyHandlers() {
+        _resultsArea.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            }
+        });
+
+        _resultsArea.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+            }
+        });
+    }
+
     private void setUpRewardGui() {
         //_wordModel.levelUp();
+        setUpAccuracyHandlers();
 
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
@@ -240,7 +315,7 @@ public class SpellingQuizScene {
         _congratsStatusArea.setPadding(new Insets(20));
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
-        _congratsTitle.setText("Congrats!! You Passed Level " + _wordModel.getCurrentLevel());
+        _congratsTitle.setText("You Passed Level " + _wordModel.getCurrentLevel() + "!!");
         _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle,_congratsStatusVBox,_congratsTitle2);
@@ -269,6 +344,7 @@ public class SpellingQuizScene {
     }
 
     private void setUpFailedGui() {
+        setUpAccuracyHandlers();
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
         _mainLayout.setSpacing(13);
@@ -301,6 +377,7 @@ public class SpellingQuizScene {
     }
 
     private void setUpReviewGui() {
+        setUpAccuracyHandlers();
         _mainLayout.getChildren().removeAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         _mainLayout.setAlignment(Pos.CENTER);
         _mainLayout.setSpacing(13);
@@ -334,7 +411,7 @@ public class SpellingQuizScene {
     private void isFinished() {
         if (_quiz.getFinishedStatus()) {
             _repeatButton.setDisable(true);
-            _definitionButton.setDisable(true);
+            //_definitionButton.setDisable(true);
             _submitButton.setDisable(true);
             _inputText.setDisable(true);
             //TODO delete _wordModel.StatsAccessibleOn();//turn on access to statistics for this level
@@ -375,7 +452,7 @@ public class SpellingQuizScene {
                 _startQuizButton.setDisable(true);
                 _inputText.setDisable(false);
                 _repeatButton.setDisable(false);
-                _definitionButton.setDisable(false);
+                //_definitionButton.setDisable(false);
                 _inputText.clear();
                 _submitButton.setDisable(false);
                 _quiz.setUpSpellingQuiz(_wordModel,_review);
