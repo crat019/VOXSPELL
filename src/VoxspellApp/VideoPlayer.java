@@ -39,7 +39,6 @@ import java.nio.file.Paths;
 public class VideoPlayer {
     private MediaPlayer _player;
     private Boolean _isPlaying;
-    private Boolean _isEnded;
     private Label _timer;
 
     //Buttons
@@ -56,7 +55,6 @@ public class VideoPlayer {
     }
 
     public void display(){
-        _isEnded=false;
         _isPlaying=true;//video is by default playing
         Stage window = new Stage();
         MediaView view = new MediaView(_player);
@@ -244,6 +242,12 @@ public class VideoPlayer {
         });
     }
 
+    /**
+     * Function for converting seconds to minutes and seconds
+     * @param current current time in seconds
+     * @param total the total length of the video in seconds
+     * @return the current time in minutes and seconds
+     */
     private String formatTime(Duration current, Duration total){
         int currentSeconds = (int)Math.floor(current.toSeconds());
         int totalSeconds = (int)Math.floor(total.toSeconds());
