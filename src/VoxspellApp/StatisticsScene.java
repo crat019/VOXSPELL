@@ -282,34 +282,5 @@ public class StatisticsScene {
 
 
 
-
-            /*
-            dataNode.setEffect(null);
-            dataNode.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    dataNode.setEffect(graphGlow);
-                    dataText.setTranslateX(event.getSceneX());
-                    dataText.setTranslateY(event.getSceneY());
-                }
-            });
-            dataNode.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    dataNode.setEffect(null);//when mouse hover off, no longer glow
-                }
-            });
-            dataNode.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    dataNode.setEffect(graphGlow);
-                    dataText.setTranslateX(event.getSceneX());
-                    dataText.setTranslateY(event.getSceneY());
-                    dataText.setText(text);
-                }
-            });
-            */
-
-
     }
 }

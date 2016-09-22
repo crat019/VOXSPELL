@@ -49,7 +49,8 @@ public class InitialScene {
         _window = window;
 
         playButton = new Button("PLAY");
-        playButton.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9; -fx-background-radius: 20 20 20 20");
+        playButton.setStyle("-fx-font: bold 64 latoheavy; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill:  white;");
+        playButton.setPrefSize(325, 285);
 
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
         GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
@@ -85,12 +86,12 @@ public class InitialScene {
         menuSceneLayout.setPrefWidth(200);//set width of menu buttons
         _menuGroup = new ToggleGroup();
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
-        _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
-        _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "Review Game");
-        _statisticsButton = createMenuButtons("MediaResources/newGame.png", "Statistics");
-        _resetButton = createMenuButtons("MediaResources/newGame.png", "Reset");
+        _newGameButton = createMenuButtons("MediaResources/newGame.png", "NEW");
+        _reviewGameButton = createMenuButtons("MediaResources/newGame.png", "REVIEW");
+        _statisticsButton = createMenuButtons("MediaResources/newGame.png", "STATISTICS");
+        _resetButton = createMenuButtons("MediaResources/newGame.png", "RESET");
 
-        menuSceneLayout.setPadding(new Insets(20, 10, 10, 20));//insets: top right bottom left
+        menuSceneLayout.setPadding(new Insets(10));//insets: top right bottom left
         menuSceneLayout.getChildren().addAll(_newGameButton, _reviewGameButton, _statisticsButton, _resetButton);
         menuSceneLayout.getStyleClass().add("vbox");//add the custom vbox layout style
 
@@ -110,12 +111,12 @@ public class InitialScene {
         //Image newGameIcon = new Image(imageName, 120, 100, false, false);//size of image
         //ToggleButton newButton = new ToggleButton(caption, new ImageView(newGameIcon));
         ToggleButton newButton = new ToggleButton(caption);
-        newButton.setPrefWidth(200);
-        newButton.setPrefHeight(150);
-        newButton.setStyle("-fx-font: bold italic 17 arial; -fx-base: #b6e7c9; -fx-background-radius: 20 20 20 20;");
+        newButton.setPrefWidth(180);
+        newButton.setPrefHeight(140);
+        newButton.setStyle("-fx-font: bold 20 arial; -fx-base: #1db361; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
         newButton.setContentDisplay(ContentDisplay.TOP);
         newButton.setToggleGroup(_menuGroup);
-        if (caption.equals("New Game")){
+        if (caption.equals("NEW")){
             newButton.setSelected(true);
         }
         return newButton;
@@ -136,14 +137,14 @@ public class InitialScene {
         gameGrid.setHgap(5);
 
         Label levelLabel = new Label("Level");
-        levelLabel.setStyle("-fx-font: bold italic 25 arial;");
+        levelLabel.setStyle("-fx-font: bold 25 laotheavy; -fx-text-fill:  white;");
         levelLabel.setAlignment(Pos.CENTER);
         GridPane.setConstraints(levelLabel, 0, 0);
 
         ToggleGroup levelToggles = setLevelButtons(_model.getTotalLevels(), gameGrid);
 
         Label voiceLabel = new Label("Voice");
-        voiceLabel.setStyle("-fx-font: bold italic 25 arial;");
+        voiceLabel.setStyle("-fx-font: bold 25 latoheavy; -fx-text-fill:  white;");
         voiceLabel.setAlignment(Pos.CENTER);
         GridPane.setConstraints(voiceLabel, 0, 3);
 
@@ -152,7 +153,7 @@ public class InitialScene {
         _voiceOptionCombo.getItems().addAll(
                 Festival.getVoiceList()
         );
-        _voiceOptionCombo.setStyle("-fx-font: 20 arial; -fx-background-radius: 20 20 20 20");
+        _voiceOptionCombo.setStyle("-fx-font: 20 latoheavy; -fx-background-radius: 20 20 20 20");
         _voiceOptionCombo.setPrefWidth(275);
         _voiceOptionCombo.setValue(Festival._getVoice());
         _voiceOptionCombo.setOnAction(event -> {
@@ -163,7 +164,7 @@ public class InitialScene {
 
         gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo);
 
-        GridPane.setConstraints(playButton, 2, 17);
+        GridPane.setConstraints(playButton, 0, 16);
         gameGrid.getChildren().add(playButton);
         return gameGrid;
 

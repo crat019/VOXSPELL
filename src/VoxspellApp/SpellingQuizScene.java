@@ -46,11 +46,13 @@ public class SpellingQuizScene {
 
     //CONGRATS PANE
     private HBox _congratsStatusArea = new HBox();
+    private VBox _congratsStatusVBox = new VBox();
 
     //TEXT
     private TextField _inputText = new TextField();
     private Label _levelTitle = new Label();
     private Label _congratsTitle = new Label();
+    private Label _congratsTitle2 = new Label();
     private Label _modeTitle = new Label();
 
     //BUTTONS
@@ -98,14 +100,14 @@ public class SpellingQuizScene {
         setUpButtonArea();
         setUpResultsArea();
         _menu = new MenuPopup();
-        _mainLayout.setPadding(new Insets(20));
+        _mainLayout.setPadding(new Insets(20,20,20,20));
         _mainLayout.getChildren().addAll(_statusArea,_resultsArea,_buttonArea,_textArea);
         BackgroundImage menuBackground = new BackgroundImage(new Image("MediaResources/background.png", 1040, 640, false, true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         _mainLayout.setBackground(new Background(menuBackground));
 
         _mainScene = new Scene(_mainLayout, 1040, 640);
-        _mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");
+        //_mainScene.getStylesheets().add("VoxspellApp/LayoutStyles");
     }
 
     private void setUpTextArea() {
@@ -121,7 +123,7 @@ public class SpellingQuizScene {
 
         _submitButton.setMinWidth(100);
         _submitButton.setMinHeight(50);
-        _submitButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10;");
+        _submitButton.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
         _submitButtonOpacity = _submitButton.getOpacity();
         _submitButton.setDisable(true);
 
@@ -134,14 +136,14 @@ public class SpellingQuizScene {
         _statusArea.setAlignment(Pos.CENTER);
 
         _levelTitle.setText("Level " + _wordModel.getCurrentLevel());
-        _levelTitle.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9;");
+        _levelTitle.setStyle("-fx-font: bold 40 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
         if (_review) {
             _modeTitle.setText("Review Quiz");
         } else {
             _modeTitle.setText("New Quiz");
         }
-        _modeTitle.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9;");
+        _modeTitle.setStyle("-fx-font: bold 40 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
         _statusArea.getChildren().addAll(_levelTitle,_modeTitle);
     }
@@ -154,16 +156,16 @@ public class SpellingQuizScene {
 
         _settingsButton.setMinWidth(150);
         _settingsButton.setMinHeight(150);
-        _settingsButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
+        _settingsButton.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
 
         _definitionButton.setMinWidth(150);
         _definitionButton.setMinHeight(150);
-        _definitionButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
+        _definitionButton.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
         _definitionButton.setDisable(true);
 
         _repeatButton.setMinWidth(150);
         _repeatButton.setMinHeight(150);
-        _repeatButton.setStyle("-fx-font: bold 20 arial; -fx-base: #b6e7c9; -fx-background-radius: 75 75 75 75;");
+        _repeatButton.setStyle("-fx-font: bold 20 arial; -fx-base: #fbb040; -fx-background-radius: 75 75 75 75; -fx-text-fill: white");
         _repeatButton.setDisable(true);
 
 
@@ -184,7 +186,7 @@ public class SpellingQuizScene {
 
         _startQuizButton.setMinWidth(180);
         _startQuizButton.setMinHeight(50);
-        _startQuizButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 30 30 30 30;");
+        _startQuizButton.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 30 30 30 30; -fx-text-fill: white");
         _resultsArea.getChildren().addAll(_startQuizButton);
     }
 
@@ -217,8 +219,10 @@ public class SpellingQuizScene {
         _definitionButton.setDisable(true);
         _repeatButton.setDisable(true);
         _inputText.setDisable(true);
+        _inputText.setText("Press Start Quiz To Start Your Quiz!!");
         _submitButton.setDisable(true);
         _mainLayout.setSpacing(0);
+        _mainLayout.setAlignment(Pos.TOP_CENTER);
         _levelTitle.setText("Level " + _wordModel.getCurrentLevel());
         _resultsArea.getChildren().removeAll(_circleList);
         _resultsArea.getChildren().addAll(_startQuizButton);
@@ -237,29 +241,29 @@ public class SpellingQuizScene {
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
         _congratsTitle.setText("Congrats!! You Passed Level " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
-        _congratsStatusArea.getChildren().removeAll(_congratsTitle);
+        _congratsStatusArea.getChildren().removeAll(_congratsTitle,_congratsStatusVBox,_congratsTitle2);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);
 
         _videoButton.setMinWidth(200);
         _videoButton.setMinHeight(200);
-        _videoButton.setStyle("-fx-font: bold italic 25 arial; -fx-base: #b6e7c9;-fx-background-radius: 100 100 100 100");
+        _videoButton.setStyle("-fx-font: bold italic 25 arial; -fx-base: #fbb040;-fx-background-radius: 100 100 100 100; -fx-text-fill: white");
 
         _nextLevelButton.setMinWidth(250);
         _nextLevelButton.setMinHeight(25);
-        _nextLevelButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _nextLevelButton.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
         if (_wordModel.getCurrentLevel() >= _wordModel.getNumberOfLevels()) {
             _nextLevelButton.setDisable(true);
         }
 
         _stayButton.setMinWidth(250);
         _stayButton.setMinHeight(25);
-        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
 
         _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_videoButton,_nextLevelButton,_stayButton,_mainMenu);
     }
@@ -272,20 +276,26 @@ public class SpellingQuizScene {
         _congratsStatusArea.setSpacing(50);
         _congratsStatusArea.setPadding(new Insets(20));
         _congratsStatusArea.setAlignment(Pos.CENTER);
+        _congratsStatusVBox.setAlignment(Pos.CENTER);
 
-        _congratsTitle.setText("Please Try Again!! You Didn't Pass Level " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setText("Please Try Again!!");
+        _congratsTitle2.setText("You Didn't Pass Level " + _wordModel.getCurrentLevel());
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040; -fx-text-fill: white");
+        _congratsTitle2.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040; -fx-text-fill: white");
 
-        _congratsStatusArea.getChildren().removeAll(_congratsTitle);
-        _congratsStatusArea.getChildren().addAll(_congratsTitle);
+        _congratsStatusVBox.getChildren().removeAll(_congratsTitle,_congratsTitle2);
+        _congratsStatusVBox.getChildren().addAll(_congratsTitle,_congratsTitle2);
+
+        _congratsStatusArea.getChildren().removeAll(_congratsStatusVBox,_congratsTitle2,_congratsTitle);
+        _congratsStatusArea.getChildren().addAll(_congratsStatusVBox);
 
         _stayButton.setMinWidth(250);
         _stayButton.setMinHeight(25);
-        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _stayButton.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
 
         _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_stayButton,_mainMenu);
     }
@@ -300,14 +310,14 @@ public class SpellingQuizScene {
         _congratsStatusArea.setAlignment(Pos.CENTER);
 
         _congratsTitle.setText("Thanks for reviewing Level " + _wordModel.getCurrentLevel());
-        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #b6e7c9;");
+        _congratsTitle.setStyle("-fx-font: bold italic 35 arial; -fx-base: #fbb040;");
 
         _congratsStatusArea.getChildren().removeAll(_congratsTitle);
         _congratsStatusArea.getChildren().addAll(_congratsTitle);
 
         _mainMenu.setMinWidth(250);
         _mainMenu.setMinHeight(25);
-        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #b6e7c9; -fx-background-radius: 10 10 10 10");
+        _mainMenu.setStyle("-fx-font: bold 18 arial; -fx-base: #fbb040; -fx-background-radius: 10 10 10 10; -fx-text-fill: white");
 
         _mainLayout.getChildren().addAll(_congratsStatusArea,_resultsArea,_mainMenu);
     }
