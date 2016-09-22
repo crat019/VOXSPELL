@@ -116,6 +116,7 @@ public class SpellingQuiz {
         new Thread(_festivalTask).start();
     }
 
+
     public void repeatWord() {
         startFestivalThread(_spellingList.get(_position).getWord());
     }
