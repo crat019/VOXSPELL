@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -62,6 +63,7 @@ public class StatisticsScene {
 
         VBox optionLayout = new VBox(20);
         optionLayout.setPrefWidth(200);//set menu width
+        optionLayout.setPadding(new Insets(20,20,20,20));
         Hyperlink link = new Hyperlink("Overview");
         link.setOnAction(e->{//set graphScene to the overall statistics setting
             _bgLayout.setCenter(_graphSceneLayout);
@@ -72,14 +74,19 @@ public class StatisticsScene {
             final int level = i;
             link = new Hyperlink("Level "+(i));
             link.setOnAction(e-> {//change the graphScene
-                VBox graphLayout = new VBox(80);
+                VBox graphLayout = new VBox(20);
+                graphLayout.setAlignment(Pos.CENTER);
                 if (!_model.isStatsAccessible(level-1)) {
                     Label accessDeniedLabel = new Label("You have not reached this level yet.");
                     graphLayout.getChildren().add(accessDeniedLabel);
                 } else {
                     PieChart levelPie = createPie("Level " + (level) + " Accuracy", level-1);
                     BarChart<Number, String> levelBar = createBar("Word Statistics", level-1);
-                    graphLayout.getChildren().addAll(levelPie, levelBar);
+                    double[] percentages = getPercentage(levelPie.getData());
+                    Label accuracy = new Label(String.valueOf(percentages[2]));
+                    graphLayout.getChildren().addAll(accuracy, levelPie);
+                    drawPieLabels(levelPie, graphLayout);
+                    graphLayout.getChildren().add(levelBar);
                 }
                 ScrollPane graphSceneLayout = new ScrollPane(graphLayout);//set the scrollpane with a vbox consisting of pie and bar
                 _bgLayout.setCenter(graphSceneLayout);
@@ -89,10 +96,17 @@ public class StatisticsScene {
         }
         optionLayout.setAlignment(Pos.CENTER);//set nodes to center of vbox
         _menu = new ScrollPane(optionLayout);
+        _menu.setFitToWidth(true);//expand scrollpane x-wise
 
-        VBox graphLayout = new VBox(80);
+        VBox graphLayout = new VBox(15);
+        graphLayout.setAlignment(Pos.CENTER);
+        graphLayout.setPadding(new Insets(10,10,10,10));
         //TODO VBox add pie graph of overall statistic
-        graphLayout.getChildren().add(createOverallPie());
+        PieChart pie = createOverallPie();
+        double[] percentages = getPercentage(pie.getData());
+        Label accLabel = new Label(String.valueOf(percentages[2]));
+        graphLayout.getChildren().addAll(accLabel, pie);
+        drawPieLabels(pie, graphLayout);
         _graphSceneLayout = new ScrollPane(graphLayout);
         _graphSceneLayout.setStyle("-fx-background-color: transparent;");
 
@@ -106,7 +120,18 @@ public class StatisticsScene {
     }
 
     private PieChart createPie(String title, int level){
-        int[] levelData = _model.findAccuracy(level);//int array size 3 level -1 b/c model accuracy starts at 0
+        int[] _levelData = _model.findAccuracy(level);//int array size 3 level -1 b/c model accuracy starts at 0
+        double[] levelData = new double[3];
+        double total = 0;
+        for(int i = 0; i < levelData.length; i++){
+            total += _levelData[i];
+        }
+        for(int i = 0; i < levelData.length; i++){
+            int value = _levelData[i];
+            if (value != 0){
+                levelData[i] = (value/total)*100;
+            }
+        }
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
                 new PieChart.Data("Failed", levelData[0]),
                 new PieChart.Data("Faulted", levelData[1]),
@@ -118,13 +143,26 @@ public class StatisticsScene {
     }
 
     private PieChart createOverallPie(){
-        int[] levelData = _model.getOverall();//int array size 3
+
+        int[] _levelData = _model.getOverall();//int array size 3
+        double[] levelData = new double[3];
+        double total = 0;
+        for(int i = 0; i < levelData.length; i++){
+            total += _levelData[i];
+        }
+        for(int i = 0; i < levelData.length; i++){
+            int value = _levelData[i];
+            if (value != 0){
+                levelData[i] = (value/total)*100;
+            }
+        }
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
                 new PieChart.Data("Failed", levelData[0]),
                 new PieChart.Data("Faulted", levelData[1]),
                 new PieChart.Data("Mastered", levelData[2])
         );
         final PieChart pieGraph = new PieChart(pieData);
+
         pieGraph.setTitle("Overall Accuracy");
         return pieGraph;
     }
@@ -177,6 +215,42 @@ public class StatisticsScene {
         return barGraph;
     }
 
+    private void drawPieLabels(PieChart pieGraph, VBox background){
+        final Label percentage = new Label("");
+        percentage.setStyle("-fx-font: 22 arial;");
+        for (final PieChart.Data data : pieGraph.getData()){
+
+            data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+
+                    percentage.setTranslateX(event.getX());
+                    percentage.setTranslateY(event.getY() - 240);
+                    percentage.setText(String.valueOf(data.getPieValue()) + "%");
+                }
+            });
+        }
+        background.getChildren().add(percentage);
+    }
+
+    private double[] getPercentage(ObservableList<PieChart.Data> primitive){
+        double total=0;
+        double[] percentageList = new double[3];
+        double[] primList = new double[3];
+        int j = 0;
+        for (PieChart.Data element:primitive){
+            total+=element.getPieValue();
+            primList[j] = element.getPieValue();
+            j++;
+        }
+        for (int i = 0; i<percentageList.length; i++){
+            if (primList[i] != 0){
+                percentageList[i] = (primList[i]/total)*100;
+            }
+        }
+        return  percentageList;
+    }
+
     private void drawBarLabels(XYChart.Data<Number, String> data) {
         data.nodeProperty().addListener(new ChangeListener<Node>() {
             @Override
@@ -204,6 +278,8 @@ public class StatisticsScene {
                 }
             }
         });
+
+
 
 
 
