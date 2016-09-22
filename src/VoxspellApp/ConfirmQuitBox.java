@@ -47,12 +47,12 @@ public class ConfirmQuitBox {
         optionLayout.setPadding(new Insets(15, 0, 15, 0));
         optionLayout.setHgap(30);
         optionLayout.setVgap(4);
-        optionLayout.setStyle("-fx-background-color: #96cd7e;");
+        optionLayout.setStyle("-fx-base: #262262;");
 
         VBox layout = new VBox(10);
         layout.getChildren().addAll(label, optionLayout);
         layout.setAlignment(Pos.CENTER);
-        layout.setStyle("-fx-background-color: #96cd7e;");
+        layout.setStyle("-fx-base: #262262;");
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
