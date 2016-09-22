@@ -31,5 +31,24 @@
     -fx-underline: true;
 }
 
+.bargraph {
+    -fx-text-fill: white;
+    -fx-background-color: #e2ecfe;
+    -fx-background-color: transparent;
+    -fx-fill: transparent;
+    -fx-fill: #99bcfd;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+    -fx-stroke: #3278fa;
+    -fx-stroke: #3278fa;
+    -fx-text-fill: #4682b4;
+    -fx-font-size: 1.6em;
+    -fx-text-fill: #4682b4;
+}
+
+.statslabel {
+    -fx-text-fill: white;
+    -fx-font: bold 18 arial;
+}
 
 
