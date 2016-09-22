@@ -1,6 +1,6 @@
 package VoxspellApp;
 
-;import javafx.geometry.Insets;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,10 +23,13 @@ public class ConfirmQuitBox {
 
         Label label = new Label();
         label.setText(message);
+        label.setStyle("-fx-font: bold 13 ariel");
 
         //create buttons
-        Button yesButton = new Button("yes");
-        Button noButton = new Button("no");
+        Button yesButton = new Button("Yes");
+        yesButton.setStyle("-fx-background-radius: 5 5 5 5");
+        Button noButton = new Button("No");
+        noButton.setStyle("-fx-background-radius: 5 5 5 5");
 
         yesButton.setOnAction(e -> {
             answer = true;

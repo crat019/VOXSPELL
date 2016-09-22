@@ -25,6 +25,7 @@ public class InitialScene {
     private Stage _window;
     private Scene _mainScene;//background scene of primary window
     private BorderPane _mainLayout;
+    private boolean _review = false;
 
     //Buttons
     private ToggleGroup _menuGroup;
@@ -48,7 +49,7 @@ public class InitialScene {
         _window = window;
 
         playButton = new Button("PLAY");
-        playButton.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+        playButton.setStyle("-fx-font: bold italic 40 arial; -fx-base: #b6e7c9; -fx-background-radius: 20 20 20 20");
 
         VBox menuSceneLayout = setMenuScene();//sets the left-hand side menu panel
         GridPane gameSceneLayout = setGameScene();//sets the right-hand side main
@@ -81,7 +82,7 @@ public class InitialScene {
      */
     private VBox setMenuScene(){
         VBox menuSceneLayout = new VBox();
-        menuSceneLayout.setPrefWidth(150);//set width of menu buttons
+        menuSceneLayout.setPrefWidth(200);//set width of menu buttons
         _menuGroup = new ToggleGroup();
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         _newGameButton = createMenuButtons("MediaResources/newGame.png", "New Game");
@@ -106,9 +107,12 @@ public class InitialScene {
      * @return button node
      */
     private ToggleButton createMenuButtons(String imageName, String caption){
-        Image newGameIcon = new Image(imageName, 120, 100, false, true);//size of image
-        ToggleButton newButton = new ToggleButton(caption, new ImageView(newGameIcon));
-        newButton.setStyle("-fx-font: 18 arial; -fx-base: #b6e7c9;");
+        //Image newGameIcon = new Image(imageName, 120, 100, false, false);//size of image
+        //ToggleButton newButton = new ToggleButton(caption, new ImageView(newGameIcon));
+        ToggleButton newButton = new ToggleButton(caption);
+        newButton.setPrefWidth(200);
+        newButton.setPrefHeight(150);
+        newButton.setStyle("-fx-font: bold italic 17 arial; -fx-base: #b6e7c9; -fx-background-radius: 20 20 20 20;");
         newButton.setContentDisplay(ContentDisplay.TOP);
         newButton.setToggleGroup(_menuGroup);
         if (caption.equals("New Game")){
@@ -127,32 +131,39 @@ public class InitialScene {
     //we may want to reuse this for settings page
     private GridPane setGameScene(){
         GridPane gameGrid = new GridPane();
-        gameGrid.setPadding(new Insets(20,20,20,50));
-        gameGrid.setVgap(40);
-        gameGrid.setHgap(10);
+        gameGrid.setPadding(new Insets(30));
+        gameGrid.setVgap(20);
+        gameGrid.setHgap(5);
 
         Label levelLabel = new Label("Level");
-        levelLabel.setStyle("-fx-font: 22 arial;");
+        levelLabel.setStyle("-fx-font: bold italic 25 arial;");
+        levelLabel.setAlignment(Pos.CENTER);
         GridPane.setConstraints(levelLabel, 0, 0);
 
         ToggleGroup levelToggles = setLevelButtons(_model.getTotalLevels(), gameGrid);
 
         Label voiceLabel = new Label("Voice");
-        voiceLabel.setStyle("-fx-font: 22 arial;");
-        GridPane.setConstraints(voiceLabel, 0, 1);
+        voiceLabel.setStyle("-fx-font: bold italic 25 arial;");
+        voiceLabel.setAlignment(Pos.CENTER);
+        GridPane.setConstraints(voiceLabel, 0, 3);
 
         //set up combo box for choosing levels
         _voiceOptionCombo = new ComboBox<String>();
         _voiceOptionCombo.getItems().addAll(
                 Festival.getVoiceList()
         );
-        _voiceOptionCombo.setStyle("-fx-font: 22 arial;");
-        _voiceOptionCombo.setValue("kal_diphone");
-        GridPane.setConstraints(_voiceOptionCombo, 1, 1);
+        _voiceOptionCombo.setStyle("-fx-font: 20 arial; -fx-background-radius: 20 20 20 20");
+        _voiceOptionCombo.setPrefWidth(275);
+        _voiceOptionCombo.setValue(Festival._getVoice());
+        _voiceOptionCombo.setOnAction(event -> {
+            String option = (String)_voiceOptionCombo.getValue();
+            Festival.changeVoice(option);
+        });
+        GridPane.setConstraints(_voiceOptionCombo, 0, 4);
 
         gameGrid.getChildren().addAll(levelLabel, voiceLabel, _voiceOptionCombo);
 
-        GridPane.setConstraints(playButton, 0, 3);
+        GridPane.setConstraints(playButton, 2, 17);
         gameGrid.getChildren().add(playButton);
         return gameGrid;
 
@@ -166,10 +177,14 @@ public class InitialScene {
         HBox levelHBox = new HBox();
         levelHBox.setSpacing(5);
         ToggleGroup levelGroup = new ToggleGroup();
+        boolean reviewExists = false;
         for (int i = 1; i <maxLevel+1 ; i++){
-            ToggleButton levelButton = new ToggleButton("" + i);
+            ToggleButton levelButton = new ToggleButton();
+            levelButton.setPrefHeight(50);
+            levelButton.setPrefWidth(50);
+            levelButton.setText("" + i);
             levelButton.setUserData(i);
-            levelButton.setStyle("-fx-font: 22 arial;");
+            levelButton.setStyle("-fx-font: 18 arial;-fx-background-radius: 25 25 25 25");
             //upon button click, update model's level
             levelButton.setOnAction(e->{
                 _model.updateLevel(Integer.parseInt(levelButton.getText()));
@@ -184,10 +199,27 @@ public class InitialScene {
             //    levelButton.setDisable(true);
             //}
 
+            if (_review) {
+                if (_model.getLevel(i-1).getFailedList().size() == 0) {
+                    levelButton.setDisable(true);
+                } else if (!reviewExists) {
+                    reviewExists = true;
+                    levelButton.setSelected(true);
+                    _model.updateLevel(i);
+                }
+            }
+
             levelButton.setToggleGroup(levelGroup);
             levelHBox.getChildren().add(levelButton);
 
         }
+
+        if (!reviewExists && _review) {
+            playButton.setDisable(true);
+        } else {
+            playButton.setDisable(false);
+        }
+
         levelGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
@@ -198,17 +230,19 @@ public class InitialScene {
                 }
             }
         });
-        GridPane.setConstraints(levelHBox, 1, 0);
+        GridPane.setConstraints(levelHBox, 0, 1);
         gameGrid.getChildren().add(levelHBox);
         return levelGroup;
     }
 
     private void setupEventHandlers(){
         _newGameButton.setOnAction(event -> {
+            _review = false;
             _mainLayout.setCenter(setGameScene());
             _mode=Mode.NEW;
         });
         _reviewGameButton.setOnAction(event -> {
+            _review = true;
             _mainLayout.setCenter(setGameScene());
             _mode=Mode.REVIEW;
         });
@@ -221,14 +255,19 @@ public class InitialScene {
             resetVbox.setPadding(new Insets(40,50,40,40));
             resetVbox.setAlignment(Pos.TOP_CENTER);
             Label title = new Label("Clear History");
+            title.setStyle("-fx-font: bold 30 ariel");
             Image resetImage = new Image("MediaResources/newGame.png", 150, 150, false, true);
             ImageView rsImageContainer = new ImageView(resetImage);
             Label caption1 = new Label("Clearing the history will remove all history statistics.");
+            caption1.setStyle("-fx-font: 15 ariel");
             Label caption2 = new Label("Your highest level will be reset to level 1.");
+            caption2.setStyle("-fx-font: 15 ariel");
             Label caption3 = new Label("Are you sure you want to clear the history?");
+            caption3.setStyle("-fx-font: 15 ariel");
             final Label caption4 = new Label("History Successfully Cleared.");
             caption4.setVisible(false);
             Button confirmButton = new Button("Clear History");
+            confirmButton.setStyle("-fx-font: bold 15 ariel; -fx-background-radius: 10 10 10 10");
 
             confirmButton.setOnAction(e->{
                 _model.recreate();
@@ -238,13 +277,9 @@ public class InitialScene {
             _mainLayout.setCenter(resetVbox);
         });
         playButton.setOnAction(event ->{
-            SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window);
+            SpellingQuizScene newGameSceneCreator = new SpellingQuizScene(_model, _window, _review);
             Scene newGameScene = newGameSceneCreator.createScene();
             _window.setScene(newGameScene);
-        });
-        _voiceOptionCombo.setOnAction(event -> {
-            String option = (String)_voiceOptionCombo.getValue();
-            Festival.changeVoice(option);
         });
     }
 

@@ -35,9 +35,9 @@ public class VoiceChangePopup {
         _window.setMinWidth(125);
         _window.setResizable(false);
 
-        _layout = new VBox(5);
+        _layout = new VBox(7);
         _layout.setAlignment(Pos.CENTER);
-        _layout.setPadding(new Insets(10,10,10,10));
+        _layout.setPadding(new Insets(10));
 
         _oldVoice = Festival._getVoice();
         _voiceCombo = new ComboBox<>();
@@ -46,10 +46,19 @@ public class VoiceChangePopup {
         }
 
         _voiceCombo.setValue(_oldVoice);
+        _voiceCombo.setStyle("-fx-background-radius: 10 10 10 10");
+
         HBox buttonBox = new HBox(15);
+
         _applyButton = new Button("Apply");
         _applyButton.setDisable(true);
+        _applyButton.setMinWidth(70);
+        _applyButton.setStyle("-fx-background-radius: 10 10 10 10");
+
         _cancelButton = new Button("Cancel");
+        _cancelButton.setMinWidth(70);
+        _cancelButton.setStyle("-fx-background-radius: 10 10 10 10");
+
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().addAll(_applyButton, _cancelButton);
         _layout.getChildren().addAll(_voiceCombo, buttonBox);
@@ -76,7 +85,8 @@ public class VoiceChangePopup {
             }
         });
         _applyButton.setOnAction(e->{
-            Festival.changeVoice(_oldVoice);
+            Festival.changeVoice(_voiceOption);
+            _oldVoice = _voiceOption;
             _applyButton.setDisable(true);
         });
         _cancelButton.setOnAction(e->{
