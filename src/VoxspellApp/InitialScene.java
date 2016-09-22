@@ -256,19 +256,20 @@ public class InitialScene {
             resetVbox.setPadding(new Insets(40,50,40,40));
             resetVbox.setAlignment(Pos.TOP_CENTER);
             Label title = new Label("Clear History");
-            title.setStyle("-fx-font: bold 30 ariel");
-            Image resetImage = new Image("MediaResources/newGame.png", 150, 150, false, true);
+            title.setStyle("-fx-font: bold 30 arial; -fx-text-fill: white;");
+            Image resetImage = new Image("MediaResources/clearhistory.png", 330, 250, false, true);
             ImageView rsImageContainer = new ImageView(resetImage);
             Label caption1 = new Label("Clearing the history will remove all history statistics.");
-            caption1.setStyle("-fx-font: 15 ariel");
-            Label caption2 = new Label("Your highest level will be reset to level 1.");
-            caption2.setStyle("-fx-font: 15 ariel");
+            caption1.setStyle("-fx-font: 15 arial; -fx-text-fill: white");
+            Label caption2 = new Label("The accuracy rates for all the words you attempted to spell will be lost.");
+            caption2.setStyle("-fx-font: 15 arial; -fx-text-fill: white");
             Label caption3 = new Label("Are you sure you want to clear the history?");
-            caption3.setStyle("-fx-font: 15 ariel");
+            caption3.setStyle("-fx-font: 15 arial; -fx-text-fill: white");
             final Label caption4 = new Label("History Successfully Cleared.");
+            caption4.setStyle("-fx-font: bold 15 arial;-fx-text-fill: white");
             caption4.setVisible(false);
             Button confirmButton = new Button("Clear History");
-            confirmButton.setStyle("-fx-font: bold 15 ariel; -fx-background-radius: 10 10 10 10");
+            confirmButton.setStyle("-fx-font: bold 15 arial; -fx-background-radius: 10 10 10 10");
 
             confirmButton.setOnAction(e->{
                 _model.recreate();

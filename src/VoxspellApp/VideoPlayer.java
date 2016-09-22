@@ -42,6 +42,12 @@ public class VideoPlayer {
     private Boolean _isEnded;
     private Label _timer;
 
+    //Buttons
+    private Button pauseButton;
+    private Button playButton;
+    private Button stopButton;
+    private Button replayButton;
+
     public VideoPlayer(){
 
         Media video = new Media(Paths.get("big_buck_bunny_1_minute.mp4").toUri().toString());//TODO use mediaFilePath
@@ -80,29 +86,17 @@ public class VideoPlayer {
 
         //buttons
         final Button playButton = new Button();
-        Image icon = new Image("MediaResources/play.png", 25, 25, false, true);
+        Image icon = new Image("MediaResources/play.png", 20, 20, false, true);
+        playButton.setStyle("-fx-background-color: rgba(251, 176, 64, 0.71)");
         playButton.setGraphic(new ImageView(icon));
         playButton.setShape(new Circle(16));
         playButton.setMinSize(32, 32);
         playButton.setMaxSize(32,32);
-        final Button pauseButton = new Button();
-        icon = new Image("MediaResources/pause.png", 18, 18, false, true);
-        pauseButton.setShape(new Circle(13));
-        pauseButton.setMinSize(26, 26);
-        pauseButton.setMaxSize(26,26);
-        pauseButton.setGraphic(new ImageView(icon));
-        final Button stopButton = new Button();
-        icon = new Image("MediaResources/stop.png", 18, 18, false, true);
-        stopButton.setGraphic(new ImageView(icon));
-        stopButton.setShape(new Circle(13));
-        stopButton.setMinSize(26, 26);
-        stopButton.setMaxSize(26,26);
-        final Button replayButton = new Button();
-        icon = new Image("MediaResources/replay.png", 18, 18, false, true);
-        replayButton.setGraphic(new ImageView(icon));
-        replayButton.setShape(new Circle(13));
-        replayButton.setMinSize(26, 26);
-        replayButton.setMaxSize(26,26);
+
+        pauseButton = createButton("MediaResources/pause.png");
+        stopButton = createButton("MediaResources/stop.png");
+        replayButton = createButton("MediaResources/replay.png");
+
 
         //timer
         _timer = new Label();
@@ -222,9 +216,21 @@ public class VideoPlayer {
 
 
         window.setOnCloseRequest(e->{
+            //stop video before qutting
             _player.stop();
         });
 
+    }
+
+    private Button createButton(String imagePath){
+        Button button = new Button();
+        Image icon = new Image(imagePath, 15, 15, false, true);
+        button.setStyle("-fx-background-color: rgba(251, 176, 64, 0.71)");
+        button.setShape(new Circle(13));
+        button.setMinSize(26, 26);
+        button.setMaxSize(26,26);
+        button.setGraphic(new ImageView(icon));
+        return button;
     }
 
     private void update(){

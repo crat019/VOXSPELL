@@ -17,6 +17,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -75,20 +77,35 @@ public class StatisticsScene {
             link = new Hyperlink("Level "+(i));
             link.setOnAction(e-> {//change the graphScene
                 VBox graphLayout = new VBox(20);
+                graphLayout.setPadding(new Insets(10));
                 graphLayout.setAlignment(Pos.CENTER);
                 if (!_model.isStatsAccessible(level-1)) {
-                    Label accessDeniedLabel = new Label("You have not reached this level yet.");
-                    graphLayout.getChildren().add(accessDeniedLabel);
+                    VBox deniedbox = new VBox(10);
+                    deniedbox.setAlignment(Pos.CENTER);
+                    deniedbox.setPadding(new Insets(20,20,20,80));
+                    Image oopsImage = new Image("MediaResources/oops.png", 400, 400, false, true);
+                    ImageView oopsView = new ImageView(oopsImage);
+                    Label accessDeniedLabel = new Label("You have not unlocked this level yet.");
+                    accessDeniedLabel.getStyleClass().add("statslabel");
+                    Label accessDeniedLabel1 = new Label("Play a new game in the selected level and come back!");
+                    accessDeniedLabel1.getStyleClass().add("statslabel");
+                    deniedbox.getChildren().addAll(oopsView,accessDeniedLabel,accessDeniedLabel1);
+                    graphLayout.getChildren().add(deniedbox);
                 } else {
                     PieChart levelPie = createPie("Level " + (level) + " Accuracy", level-1);
                     BarChart<Number, String> levelBar = createBar("Word Statistics", level-1);
+                    levelBar.getStylesheets().add("VoxspellApp/LayoutStyles");
+                    levelBar.getStyleClass().add(".bargraph");
                     double[] percentages = getPercentage(levelPie.getData());
-                    Label accuracy = new Label(String.valueOf(percentages[2]));
+
+                    Label accuracy = new Label(String.format("%.2f", percentages[2])+"%");
+                    accuracy.setStyle("-fx-font: bold 28 arial ;-fx-text-fill: white");
                     graphLayout.getChildren().addAll(accuracy, levelPie);
                     drawPieLabels(levelPie, graphLayout);
                     graphLayout.getChildren().add(levelBar);
                 }
                 ScrollPane graphSceneLayout = new ScrollPane(graphLayout);//set the scrollpane with a vbox consisting of pie and bar
+                graphSceneLayout.setStyle("-fx-background-color: rgba(251, 176, 64, 0.71)");
                 _bgLayout.setCenter(graphSceneLayout);
 
             });
@@ -103,12 +120,14 @@ public class StatisticsScene {
         graphLayout.setPadding(new Insets(10,10,10,10));
         //TODO VBox add pie graph of overall statistic
         PieChart pie = createOverallPie();
+        pie.setStyle("-fx-tick-label-fill: white");
         double[] percentages = getPercentage(pie.getData());
-        Label accLabel = new Label(String.valueOf(percentages[2]));
+        Label accLabel = new Label(String.format("%.2f", percentages[2])+"%");
+        accLabel.setStyle("-fx-font: bold 28 arial ;-fx-text-fill: white");
         graphLayout.getChildren().addAll(accLabel, pie);
         drawPieLabels(pie, graphLayout);
         _graphSceneLayout = new ScrollPane(graphLayout);
-        _graphSceneLayout.setStyle("-fx-background-color: transparent;");
+        _graphSceneLayout.setStyle("-fx-background-color: rgba(251, 176, 64, 0.7);");
 
         _bgLayout = new BorderPane();
         _bgLayout.setLeft(_menu);
@@ -164,6 +183,7 @@ public class StatisticsScene {
         final PieChart pieGraph = new PieChart(pieData);
 
         pieGraph.setTitle("Overall Accuracy");
+        pieGraph.setStyle(".bargraph");
         return pieGraph;
     }
 
@@ -179,6 +199,8 @@ public class StatisticsScene {
         xAxis.setLabel("Frequency");
         yAxis.setLabel("Word");
         yAxis.tickLabelFontProperty().set(Font.font(16));//set the y axis (words) font size
+        yAxis.setStyle("-fx-tick-label-fill: white");
+        xAxis.setStyle("-fx-text-label-fill: white");
 
         XYChart.Series failSeries = new XYChart.Series();
         failSeries.setName("Failed");
@@ -211,6 +233,7 @@ public class StatisticsScene {
         barGraph.setMinHeight(bargraphHeight);
         barGraph.setCategoryGap(25);
         //barGraph.setStyle("-fx-font-size: 18px");//set font size of axis
+        barGraph.setStyle("-fx-text-fill: white; -fx-background-color: transparent; -fx-fill: transparent");
 
         return barGraph;
     }
@@ -258,6 +281,7 @@ public class StatisticsScene {
                 if (newValue != null) {
                     final Node dataNode = data.getNode();
                     final Text text = new Text(data.getXValue()+"");
+                    text.setStyle("-fx-text-fill: white");
 
                     dataNode.parentProperty().addListener(new ChangeListener<Parent>() {
                         @Override
