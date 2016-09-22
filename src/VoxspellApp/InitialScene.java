@@ -197,6 +197,7 @@ public class InitialScene {
         tipLabel3 = new Label("Please pick a level and then press PLAY to start that level. If all levels are locked, then");
         tipLabel4 = new Label("you need to attempt a spelling quiz before coming back here");
         _newTip.getChildren().addAll(tipLabel1,tipLabel2,tipLabel3,tipLabel4);
+
     }
 
     private void setUpNewToolTip() {
